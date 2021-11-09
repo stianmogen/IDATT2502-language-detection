@@ -6,6 +6,7 @@ import torch.nn
 import time
 from sklearn.model_selection import train_test_split
 
+import matplotlib.pyplot as plt
 import os
 
 from rnn.rnn_model import CharRNNClassifier
@@ -44,24 +45,23 @@ y_test = read_file(INPUT_DIR, "y_test.txt").split('\n')
 x_test.pop(-1)
 y_test.pop(-1)
 
-x_train = pd.DataFrame(x_train, columns=['sentence'])
-y_train = pd.DataFrame(y_train, columns=['language'])
+dataset_x = x_train + x_test
+dataset_y = y_train + y_test
 
-x_test = pd.DataFrame(x_test, columns=['sentence'])
-y_test = pd.DataFrame(y_test, columns=['language'])
+dataset_x = pd.DataFrame(dataset_x, columns=['sentence'])
+dataset_y = pd.DataFrame(dataset_y, columns=['language'])
 
-print(x_train.shape)
-print(x_test.shape)
+print(dataset_x.shape)
+print(dataset_y.shape)
 
 print('Example:')
-print('LANG =', y_train['language'].iloc[0])
-print('TEXT =', x_train['sentence'].iloc[0])
+print('LANG =', dataset_y['language'].iloc[0])
+print('TEXT =', dataset_x['sentence'].iloc[0])
+
+x_train, x_test, y_train, y_test = train_test_split(dataset_x, dataset_y, test_size=0.2, random_state=42)
 
 x_train_sentence = x_train['sentence']
 y_train_language = y_train['language']
-
-x_test_sentence = x_test['sentence']
-y_test_language = y_test['language']
 
 
 class Dictionary(object):
@@ -82,8 +82,8 @@ class Dictionary(object):
 
 
 char_dictionary = Dictionary()
-pad_token = '<pad>' # reserve index 0 for padding
-unk_token = '<unk>' # reserve index 1 for unknown token
+pad_token = '<pad>'  # reserve index 0 for padding
+unk_token = '<unk>'  # reserve index 1 for unknown token
 pad_index = char_dictionary.new_token(pad_token)
 unk_index = char_dictionary.new_token(unk_token)
 
@@ -102,26 +102,13 @@ print("Labels:", len(language_dictionary), "languages")
 x_train_idx = [np.array([char_dictionary.indicies[c] for c in line]) for line in x_train_sentence]
 y_train_idx = np.array([language_dictionary.indicies[lang] for lang in y_train_language])
 
-collection = []
-for line in x_test_sentence:
-    sentence = []
-    for character in line:
-        if char_dictionary.indicies.__contains__(character):
-            sentence.append(char_dictionary.indicies[character])
-    collection.append(np.array(sentence))
+x_train_idx, x_val_idx, y_train_idx, y_val_idx = train_test_split(x_train_idx, y_train_idx, test_size=0.125,
+                                                                  random_state=42)
 
-x_test_idx = np.array(collection)
-print(x_test_idx.shape)
-
-y_test_idx = np.array([language_dictionary.indicies[lang] for lang in y_test_language])
-print(y_test_idx.shape)
-
-x_test, x_val, y_test, y_val = train_test_split(x_test_idx, y_test_idx, test_size=0.2, random_state=42)
 train_data = [(x, y) for x, y in zip(x_train_idx, y_train_idx)]
-test_data = [(x, y) for x, y in zip(x_test, y_test)]
-val_data = [(x, y) for x, y in zip(x_val, y_val)]
+val_data = [(x, y) for x, y in zip(x_val_idx, y_val_idx)]
+
 print(len(train_data), "training samples")
-print(len(test_data), "test samples")
 print(len(val_data), "validation samples")
 
 
@@ -221,17 +208,18 @@ def validate(model, data, batch_size, token_size):
     return dev_acc
 
 
-hidden_size = 200
+hidden_size = 150
 embedding_size = 64
 bidirectional = False
 ntokens = len(char_dictionary)
 nlabels = len(language_dictionary)
 
-model = CharRNNClassifier(ntokens, embedding_size, hidden_size, nlabels, pad_idx=pad_index, bidirectional=bidirectional).to(device)
+model = CharRNNClassifier(ntokens, embedding_size, hidden_size, nlabels, pad_idx=pad_index,
+                          bidirectional=bidirectional).to(device)
 optimizer = torch.optim.Adam(model.parameters())
 
 batch_size, token_size = 256, 200000
-epochs = 25
+epochs = 4
 train_accuracy = []
 valid_accuracy = []
 
@@ -250,9 +238,8 @@ for name, param in model.named_parameters():
     print(f'{name:20} {param.numel()} {list(param.shape)}')
 print(f'TOTAL                {sum(p.numel() for p in model.parameters())}')
 
-import matplotlib.pyplot as plt
-
 plt.plot(range(1, len(train_accuracy) + 1), train_accuracy)
 plt.plot(range(1, len(valid_accuracy) + 1), valid_accuracy)
 plt.xlabel('epoch')
 plt.ylabel('Accuracy')
+plt.show()
