@@ -1,19 +1,15 @@
-# This Python 3 environment comes with many helpful analytics libraries installed
 import random
-import numpy as np  # linear algebra
-import pandas as pd  # data processing, CSV file I/O (e.g. pd.read_csv)
-import torch  # Deep learning framework
-import torch.nn.functional as F
+import numpy as np
+import pandas as pd
+import torch
 import torch.nn
 import time
+from sklearn.model_selection import train_test_split
 
-# Input data files are available in the "../input/" directory.
 import os
 
-INPUTDIR = 'input'
-print(os.listdir(f'{INPUTDIR}'))
+from rnn.rnn_model import CharRNNClassifier
 
-# Init random seed to get reproducible results
 seed = 1111
 random.seed(seed)
 np.random.RandomState(seed)
@@ -29,33 +25,23 @@ else:
 
 print(device)
 
-# Constants
-INPUT_DIR = "input/"
+
+def read_file(dir, file, encoding="utf8"):
+    with open(os.path.join(dir, file), encoding=encoding) as f:
+        data = f.read()
+        return data
 
 
-with open(os.path.join(INPUT_DIR, "x_train.txt"), encoding="utf8") as f:
-    data = f.read()
+INPUT_DIR = "../input/"
 
-x_train = data.split('\n')
-
-with open(os.path.join(INPUT_DIR, "x_test.txt"), encoding="utf8") as f:
-    data = f.read()
-
-x_test = data.split('\n')
-
-with open(os.path.join(INPUT_DIR, "y_train.txt"), encoding="utf8") as f:
-    data = f.read()
-
-y_train = data.split('\n')
-
-with open(os.path.join(INPUT_DIR, "y_test.txt"), encoding="utf8") as f:
-    data = f.read()
-
-y_test = data.split('\n')
-
+x_train = read_file(INPUT_DIR, "x_train.txt").split('\n')
+y_train = read_file(INPUT_DIR, "y_train.txt").split('\n')
 x_train.pop(-1)
-x_test.pop(-1)
 y_train.pop(-1)
+
+x_test = read_file(INPUT_DIR, "x_test.txt").split('\n')
+y_test = read_file(INPUT_DIR, "y_test.txt").split('\n')
+x_test.pop(-1)
 y_test.pop(-1)
 
 x_train = pd.DataFrame(x_train, columns=['sentence'])
@@ -74,57 +60,61 @@ print('TEXT =', x_train['sentence'].iloc[0])
 x_train_sentence = x_train['sentence']
 y_train_language = y_train['language']
 
-x_test_sentence = x_train['sentence']
-y_test_language = y_train['language']
+x_test_sentence = x_test['sentence']
+y_test_language = y_test['language']
 
 
 class Dictionary(object):
     def __init__(self):
-        self.token2idx = {}
-        self.idx2token = []
+        self.indicies = {}
+        self.tokens = []
 
-    def add_token(self, token):
-        if token not in self.token2idx:
-            self.idx2token.append(token)
-            self.token2idx[token] = len(self.idx2token) - 1
-        return self.token2idx[token]
+    def new_token(self, token):
+        # Adds the token to the list, if not already added
+        # The index is set to the length of the token array - 1
+        if token not in self.indicies:
+            self.tokens.append(token)
+            self.indicies[token] = len(self.tokens) - 1
+        return self.indicies[token]
 
     def __len__(self):
-        return len(self.idx2token)
+        return len(self.tokens)
 
 
-char_vocab = Dictionary()
-pad_token = '<pad>'  # reserve index 0 for padding
-unk_token = '<unk>'  # reserve index 1 for unknown token
-pad_index = char_vocab.add_token(pad_token)
-unk_index = char_vocab.add_token(unk_token)
+char_dictionary = Dictionary()
+pad_token = '<pad>' # reserve index 0 for padding
+unk_token = '<unk>' # reserve index 1 for unknown token
+pad_index = char_dictionary.new_token(pad_token)
+unk_index = char_dictionary.new_token(unk_token)
 
-# join all the training sentences in a single string
-# and obtain the list of different characters with set
 chars = set(''.join(x_train_sentence))
 for char in sorted(chars):
-    char_vocab.add_token(char)
-print("Vocabulary:", len(char_vocab), "UTF characters")
+    char_dictionary.new_token(char)
+print("Vocabulary:", len(char_dictionary), "UTF characters")
 
-lang_vocab = Dictionary()
+language_dictionary = Dictionary()
 # use python set to obtain the list of languages without repetitions
 languages = set(y_train_language)
 for lang in sorted(languages):
-    lang_vocab.add_token(lang)
-print("Labels:", len(lang_vocab), "languages")
+    language_dictionary.new_token(lang)
+print("Labels:", len(language_dictionary), "languages")
 
-# From token or label to index
-print('k ->', char_vocab.token2idx['k'])
-print('est ->', lang_vocab.token2idx['est'])
-print(y_train_language[0], x_train_sentence[0][:10])
-x_train_idx = [np.array([char_vocab.token2idx[c] for c in line]) for line in x_train_sentence]
-y_train_idx = np.array([lang_vocab.token2idx[lang] for lang in y_train_language])
-print(y_train_idx[0], x_train_idx[0][:10])
+x_train_idx = [np.array([char_dictionary.indicies[c] for c in line]) for line in x_train_sentence]
+y_train_idx = np.array([language_dictionary.indicies[lang] for lang in y_train_language])
 
-from sklearn.model_selection import train_test_split
+collection = []
+for line in x_test_sentence:
+    sentence = []
+    for character in line:
+        if char_dictionary.indicies.__contains__(character):
+            sentence.append(char_dictionary.indicies[character])
+    collection.append(np.array(sentence))
 
-x_test_idx = [np.array([char_vocab.token2idx[c] for c in line]) for line in x_test_sentence]
-y_test_idx = np.array([lang_vocab.token2idx[lang] for lang in y_test_language])
+x_test_idx = np.array(collection)
+print(x_test_idx.shape)
+
+y_test_idx = np.array([language_dictionary.indicies[lang] for lang in y_test_language])
+print(y_test_idx.shape)
 
 x_test, x_val, y_test, y_val = train_test_split(x_test_idx, y_test_idx, test_size=0.2, random_state=42)
 train_data = [(x, y) for x, y in zip(x_train_idx, y_train_idx)]
@@ -170,38 +160,6 @@ def pool_generator(data, batch_size, token_size, shuffle=False):
         else:
             for b in p_list:
                 yield b
-
-
-class CharRNNClassifier(torch.nn.Module):
-
-    def __init__(self, input_size, embedding_size, hidden_size, output_size, model="lstm", num_layers=1,
-                 bidirectional=False, pad_idx=0):
-        super().__init__()
-        self.model = model.lower()
-        self.hidden_size = hidden_size
-        self.embed = torch.nn.Embedding(input_size, embedding_size, padding_idx=pad_idx)
-        if self.model == "gru":
-            self.rnn = torch.nn.GRU(embedding_size, hidden_size, num_layers, bidirectional=bidirectional)
-        elif self.model == "lstm":
-            self.rnn = torch.nn.LSTM(embedding_size, hidden_size, num_layers, bidirectional=bidirectional)
-        self.h2o = torch.nn.Linear(hidden_size, output_size)
-
-    def forward(self, input, input_lengths):
-        # T x B
-        encoded = self.embed(input)
-        # T x B x E
-        packed = torch.nn.utils.rnn.pack_padded_sequence(encoded, input_lengths)
-        # Packed T x B x E
-        output, _ = self.rnn(packed)
-        # Packed T x B x H
-        # Important: you may need to replace '-inf' with the default zero padding for other pooling layers
-        padded, _ = torch.nn.utils.rnn.pad_packed_sequence(output, padding_value=float('-inf'))
-        # T x B x H
-        output, _ = padded.max(dim=0)
-        # B x H
-        output = self.h2o(output)
-        # B x O
-        return output
 
 
 criterion = torch.nn.CrossEntropyLoss(reduction='sum')
@@ -266,22 +224,17 @@ def validate(model, data, batch_size, token_size):
 hidden_size = 200
 embedding_size = 64
 bidirectional = False
-ntokens = len(char_vocab)
-nlabels = len(lang_vocab)
+ntokens = len(char_dictionary)
+nlabels = len(language_dictionary)
 
-
-def get_model():
-    model = CharRNNClassifier(ntokens, embedding_size, hidden_size, nlabels, bidirectional=bidirectional,
-                              pad_idx=pad_index).to(device)
-    optimizer = torch.optim.Adam(model.parameters())
-    return model, optimizer
-
+model = CharRNNClassifier(ntokens, embedding_size, hidden_size, nlabels, pad_idx=pad_index, bidirectional=bidirectional).to(device)
+optimizer = torch.optim.Adam(model.parameters())
 
 batch_size, token_size = 256, 200000
 epochs = 25
 train_accuracy = []
 valid_accuracy = []
-model, optimizer = get_model()
+
 print(f'Training cross-validation model for {epochs} epochs')
 t0 = time.time()
 for epoch in range(1, epochs + 1):
