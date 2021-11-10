@@ -10,12 +10,17 @@ import os
 
 from rnn.rnn_model import CharRNNClassifier
 
-torch.cuda.empty_cache()
+seed = 1111
+random.seed(seed)
+np.random.RandomState(seed)
 
 device = ""
 if torch.cuda.is_available():
+    torch.cuda.empty_cache()
+    torch.cuda.manual_seed(seed)
     device = torch.device("cuda:0")
 else:
+    torch.manual_seed(seed)
     device = torch.device("cpu")
 
 print(device)
@@ -38,6 +43,18 @@ y_val = pd.DataFrame(read_file(INPUT_DIR, "y_val_split.txt"), columns=["language
 
 x_test = pd.DataFrame(read_file(INPUT_DIR, "x_test_split.txt"), columns=["sentence"])
 y_test = pd.DataFrame(read_file(INPUT_DIR, "y_test_split.txt"), columns=["language"])
+
+print("Train:")
+print(x_train.shape)
+print(y_train.shape)
+
+print("Val:")
+print(x_val.shape)
+print(y_val.shape)
+
+print("Test:")
+print(x_test.shape)
+print(y_test.shape)
 
 
 class Dictionary(object):
@@ -90,28 +107,26 @@ val_data = [(x, y) for x, y in zip(x_val_idx, y_val_idx)]
 
 def batch_generator(data, batch_size, token_size):
     """Yield elements from data in chunks with a maximum of batch_size sequences and token_size tokens."""
-    minibatch, sequences_so_far, tokens_so_far = [], 0, 0
+    minibatch, sequences_count = [], 0
     for ex in data:
         seq_len = len(ex[0])
         if seq_len > token_size:
             ex = (ex[0][:token_size], ex[1])
-            seq_len = token_size
         minibatch.append(ex)
-        sequences_so_far += 1
-        tokens_so_far += seq_len
-        if sequences_so_far == batch_size or tokens_so_far == token_size:
+        sequences_count += 1
+        if sequences_count == batch_size:
             yield minibatch
-            minibatch, sequences_so_far, tokens_so_far = [], 0, 0
-        elif sequences_so_far > batch_size or tokens_so_far > token_size:
+            minibatch, sequences_count = [], 0
+        elif sequences_count > batch_size:
             yield minibatch[:-1]
-            minibatch, sequences_so_far, tokens_so_far = minibatch[-1:], 1, len(minibatch[-1][0])
+            minibatch, sequences_count = minibatch[-1:], 1
     if minibatch:
         yield minibatch
 
 
 def pool_generator(data, batch_size, token_size, shuffle=False):
     """Sort within buckets, then batch, then shuffle batches.
-    Partitions data into chunks of size 100*token_size, sorts examples within
+    Partitions data into chunks of size token_size, sorts examples within
     each chunk, then batch these examples and shuffle the batches.
     """
     for p in batch_generator(data, batch_size * 100, token_size * 100):
@@ -133,15 +148,16 @@ def train(model, optimizer, data, batch_size, token_size, max_norm=1):
     total_loss = 0
     ncorrect = 0
     nsentences = 0
-    ntokens = 0
+
     for batch in pool_generator(data, batch_size, token_size, shuffle=True):
-        # Get input and target sequences from batch
         X = [torch.from_numpy(d[0]) for d in batch]
+
+
         X_lengths = [x.numel() for x in X]
-        ntokens += sum(X_lengths)
+
         X_lengths = torch.tensor(X_lengths, dtype=torch.long)
         y = torch.tensor([d[1] for d in batch], dtype=torch.long, device=device)
-        # Pad the input sequences to create a matrix
+
         X = torch.nn.utils.rnn.pad_sequence(X).to(device)
         model.zero_grad()
         output = model(X, X_lengths)
@@ -180,7 +196,7 @@ def validate(model, data, batch_size, token_size):
     return dev_acc
 
 
-hidden_size = 150
+hidden_size = 256
 embedding_size = 64
 bidirectional = False
 ntokens = len(char_dictionary)
@@ -190,7 +206,7 @@ model = CharRNNClassifier(ntokens, embedding_size, hidden_size, nlabels, pad_idx
                           bidirectional=bidirectional).to(device)
 optimizer = torch.optim.Adam(model.parameters())
 
-batch_size, token_size = 256, 200000
+batch_size, token_size = 256, 1500
 epochs = 20
 train_accuracy = []
 valid_accuracy = []
