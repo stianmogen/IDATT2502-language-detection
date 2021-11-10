@@ -4,24 +4,18 @@ import pandas as pd
 import torch
 import torch.nn
 import time
-from sklearn.model_selection import train_test_split
 
 import matplotlib.pyplot as plt
 import os
 
 from rnn.rnn_model import CharRNNClassifier
 
-seed = 1111
-random.seed(seed)
-np.random.RandomState(seed)
+torch.cuda.empty_cache()
 
 device = ""
 if torch.cuda.is_available():
-    torch.cuda.empty_cache()
-    torch.cuda.manual_seed(seed)
     device = torch.device("cuda:0")
 else:
-    torch.manual_seed(seed)
     device = torch.device("cpu")
 
 print(device)
@@ -30,38 +24,20 @@ print(device)
 def read_file(dir, file, encoding="utf8"):
     with open(os.path.join(dir, file), encoding=encoding) as f:
         data = f.read()
+        data = data.split("\n")
+        data.pop(-1)
         return data
 
 
-INPUT_DIR = "../input/"
+INPUT_DIR = "../input/dataset"
+x_train = pd.DataFrame(read_file(INPUT_DIR, "x_train_split.txt"), columns=["sentence"])
+y_train = pd.DataFrame(read_file(INPUT_DIR, "y_train_split.txt"), columns=["language"])
 
-x_train = read_file(INPUT_DIR, "x_train.txt").split('\n')
-y_train = read_file(INPUT_DIR, "y_train.txt").split('\n')
-x_train.pop(-1)
-y_train.pop(-1)
+x_val = pd.DataFrame(read_file(INPUT_DIR, "x_val_split.txt"), columns=["sentence"])
+y_val = pd.DataFrame(read_file(INPUT_DIR, "y_val_split.txt"), columns=["language"])
 
-x_test = read_file(INPUT_DIR, "x_test.txt").split('\n')
-y_test = read_file(INPUT_DIR, "y_test.txt").split('\n')
-x_test.pop(-1)
-y_test.pop(-1)
-
-dataset_x = x_train + x_test
-dataset_y = y_train + y_test
-
-dataset_x = pd.DataFrame(dataset_x, columns=['sentence'])
-dataset_y = pd.DataFrame(dataset_y, columns=['language'])
-
-print(dataset_x.shape)
-print(dataset_y.shape)
-
-print('Example:')
-print('LANG =', dataset_y['language'].iloc[0])
-print('TEXT =', dataset_x['sentence'].iloc[0])
-
-x_train, x_test, y_train, y_test = train_test_split(dataset_x, dataset_y, test_size=0.2, random_state=42)
-
-x_train_sentence = x_train['sentence']
-y_train_language = y_train['language']
+x_test = pd.DataFrame(read_file(INPUT_DIR, "x_test_split.txt"), columns=["sentence"])
+y_test = pd.DataFrame(read_file(INPUT_DIR, "y_test_split.txt"), columns=["language"])
 
 
 class Dictionary(object):
@@ -87,29 +63,29 @@ unk_token = '<unk>'  # reserve index 1 for unknown token
 pad_index = char_dictionary.new_token(pad_token)
 unk_index = char_dictionary.new_token(unk_token)
 
-chars = set(''.join(x_train_sentence))
+chars = set(''.join(x_train["sentence"]))
 for char in sorted(chars):
     char_dictionary.new_token(char)
-print("Vocabulary:", len(char_dictionary), "UTF characters")
+print("Character vocabulary:", len(char_dictionary), "UTF characters")
 
 language_dictionary = Dictionary()
-# use python set to obtain the list of languages without repetitions
-languages = set(y_train_language)
+languages = set(y_train["language"])
 for lang in sorted(languages):
     language_dictionary.new_token(lang)
-print("Labels:", len(language_dictionary), "languages")
+print("Language vocabulary:", len(language_dictionary), "languages")
 
-x_train_idx = [np.array([char_dictionary.indicies[c] for c in line]) for line in x_train_sentence]
-y_train_idx = np.array([language_dictionary.indicies[lang] for lang in y_train_language])
 
-x_train_idx, x_val_idx, y_train_idx, y_val_idx = train_test_split(x_train_idx, y_train_idx, test_size=0.125,
-                                                                  random_state=42)
+x_train_idx = [np.array([char_dictionary.indicies[c] for c in line]) for line in x_train["sentence"]]
+y_train_idx = np.array([language_dictionary.indicies[lang] for lang in y_train["language"]])
+
+x_val_idx = [np.array([char_dictionary.indicies[c] for c in line if c in char_dictionary.indicies]) for line in x_val["sentence"]]
+y_val_idx = np.array([language_dictionary.indicies[lang] for lang in y_val["language"]])
+
+x_test_idx = [np.array([char_dictionary.indicies[c] for c in line if c in char_dictionary.indicies]) for line in x_test["sentence"]]
+y_test_idx = np.array([language_dictionary.indicies[lang] for lang in y_val["language"]])
 
 train_data = [(x, y) for x, y in zip(x_train_idx, y_train_idx)]
 val_data = [(x, y) for x, y in zip(x_val_idx, y_val_idx)]
-
-print(len(train_data), "training samples")
-print(len(val_data), "validation samples")
 
 
 def batch_generator(data, batch_size, token_size):
@@ -152,13 +128,12 @@ def pool_generator(data, batch_size, token_size, shuffle=False):
 criterion = torch.nn.CrossEntropyLoss(reduction='sum')
 
 
-def train(model, optimizer, data, batch_size, token_size, max_norm=1, log=False):
+def train(model, optimizer, data, batch_size, token_size, max_norm=1):
     model.train()
     total_loss = 0
     ncorrect = 0
     nsentences = 0
     ntokens = 0
-    niterations = 0
     for batch in pool_generator(data, batch_size, token_size, shuffle=True):
         # Get input and target sequences from batch
         X = [torch.from_numpy(d[0]) for d in batch]
@@ -179,12 +154,9 @@ def train(model, optimizer, data, batch_size, token_size, max_norm=1, log=False)
         total_loss += loss.item()
         ncorrect += (torch.max(output, 1)[1] == y).sum().item()
         nsentences += y.numel()
-        niterations += 1
 
     total_loss = total_loss / nsentences
     accuracy = 100 * ncorrect / nsentences
-    if log:
-        print(f'Train: wpb={ntokens // niterations}, bsz={nsentences // niterations}, num_updates={niterations}')
     return accuracy
 
 
@@ -219,14 +191,15 @@ model = CharRNNClassifier(ntokens, embedding_size, hidden_size, nlabels, pad_idx
 optimizer = torch.optim.Adam(model.parameters())
 
 batch_size, token_size = 256, 200000
-epochs = 4
+epochs = 20
 train_accuracy = []
 valid_accuracy = []
 
 print(f'Training cross-validation model for {epochs} epochs')
 t0 = time.time()
 for epoch in range(1, epochs + 1):
-    acc = train(model, optimizer, train_data, batch_size, token_size, log=epoch == 1)
+    acc = train(model, optimizer, train_data, batch_size, token_size)
+
     train_accuracy.append(acc)
     print(f'| epoch {epoch:03d} | train accuracy={acc:.1f}% ({time.time() - t0:.0f}s)')
     acc = validate(model, val_data, batch_size, token_size)
