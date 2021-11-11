@@ -12,7 +12,7 @@ O = Output size (number of languages)
 
 class CharRNNClassifier(torch.nn.Module):
 
-    def __init__(self, input_size, embedding_size, hidden_size, output_size, model="lstm", num_layers=1,
+    def __init__(self, input_size, embedding_size, hidden_size, output_size, model, num_layers=1,
                  bidirectional=False, pad_idx=0):
         super().__init__()
         self.model = model.lower()
