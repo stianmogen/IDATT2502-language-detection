@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import os
 
 from rnn.rnn_model import CharRNNClassifier
+from utils.Dataloader import Dataloader
 
 seed = 1111
 random.seed(seed)
@@ -26,23 +27,9 @@ else:
 print(device)
 
 
-def read_file(dir, file, encoding="utf8"):
-    with open(os.path.join(dir, file), encoding=encoding) as f:
-        data = f.read()
-        data = data.split("\n")
-        data.pop(-1)
-        return data
-
-
 INPUT_DIR = "../input/dataset"
-x_train = pd.DataFrame(read_file(INPUT_DIR, "x_train_split.txt"), columns=["sentence"])
-y_train = pd.DataFrame(read_file(INPUT_DIR, "y_train_split.txt"), columns=["language"])
-
-x_val = pd.DataFrame(read_file(INPUT_DIR, "x_val_split.txt"), columns=["sentence"])
-y_val = pd.DataFrame(read_file(INPUT_DIR, "y_val_split.txt"), columns=["language"])
-
-x_test = pd.DataFrame(read_file(INPUT_DIR, "x_test_split.txt"), columns=["sentence"])
-y_test = pd.DataFrame(read_file(INPUT_DIR, "y_test_split.txt"), columns=["language"])
+dataloader = Dataloader(INPUT_DIR)
+x_train, y_train, x_val, y_val, x_test, y_test = dataloader.get_dataframes()
 
 print("Train:")
 print(x_train.shape)
