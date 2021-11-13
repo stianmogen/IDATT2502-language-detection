@@ -8,6 +8,7 @@ import time
 import matplotlib.pyplot as plt
 import os
 
+from rnn import dictionary
 from rnn.rnn_model import CharRNNClassifier
 from utils.Dataloader import Dataloader
 from rnn.dictionary import Dictionary
@@ -83,6 +84,7 @@ for lang in sorted(languages):
     language_dictionary.new_token(lang)
 print("Language vocabulary:", len(language_dictionary), "languages")
 
+char_dictionary, language_dictionary = dictionary.load_dictionary()
 
 x_train_idx = [np.array([char_dictionary.indicies[c] for c in line]) for line in x_train["sentence"]]
 y_train_idx = np.array([language_dictionary.indicies[lang] for lang in y_train["language"]])
@@ -91,7 +93,7 @@ x_val_idx = [np.array([char_dictionary.indicies[c] for c in line if c in char_di
 y_val_idx = np.array([language_dictionary.indicies[lang] for lang in y_val["language"]])
 
 x_test_idx = [np.array([char_dictionary.indicies[c] for c in line if c in char_dictionary.indicies]) for line in x_test["sentence"]]
-y_test_idx = np.array([language_dictionary.indicies[lang] for lang in y_val["language"]])
+y_test_idx = np.array([language_dictionary.indicies[lang] for lang in y_test["language"]])
 
 train_data = [(x, y) for x, y in zip(x_train_idx, y_train_idx)]
 val_data = [(x, y) for x, y in zip(x_val_idx, y_val_idx)]

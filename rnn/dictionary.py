@@ -1,3 +1,5 @@
+import pickle
+
 from utils.Dataloader import Dataloader
 
 
@@ -21,7 +23,7 @@ class Dictionary(object):
 def create_dictionary():
     INPUT_DIR = "../input/dataset"
     dataloader = Dataloader(INPUT_DIR)
-    x_train, y_train, x_val, y_val, x_test, y_test = dataloader.get_dataframes()
+    x_train, y_train, _, _, _, _ = dataloader.get_dataframes()
 
     char_dictionary = Dictionary()
     pad_token = '<pad>'  # reserve index 0 for padding
@@ -40,4 +42,23 @@ def create_dictionary():
         language_dictionary.new_token(lang)
     print("Language vocabulary:", len(language_dictionary), "languages")
 
-create_dictionary()
+    return char_dictionary, language_dictionary
+
+
+def write_dictionary():
+    root_out_path = "out/"
+    char_dictionary, language_dictionary = create_dictionary()
+    with open(f'{root_out_path}char_dic.txt', 'wb') as f1:
+        pickle.dump(char_dictionary, f1)
+    with open(f'{root_out_path}lang_dic.txt', 'wb') as f2:
+        pickle.dump(language_dictionary, f2)
+
+
+def load_dictionary():
+    root_out_path = "out/"
+    with open(f'{root_out_path}char_dic.txt', 'rb') as f1:
+        char_dic = pickle.load(f1)
+    with open(f'{root_out_path}lang_dic.txt', 'rb') as f2:
+        lang_dic = pickle.load(f2)
+
+    return char_dic, lang_dic
