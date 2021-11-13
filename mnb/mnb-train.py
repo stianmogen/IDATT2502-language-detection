@@ -1,4 +1,5 @@
 import os
+import pickle
 import random
 import re
 
@@ -54,40 +55,52 @@ le = LabelEncoder()
 y_train = le.fit_transform(y_train)
 y_test = le.transform(y_test)
 
-cv = CountVectorizer(analyzer='char', ngram_range=(1, 4))
-
-x_train = cv.fit_transform(x_train)
-x_test = cv.transform(x_test)
-
-print("\nVectorized x_train, x_test: ")
-print(x_train.shape)
-print(x_test.shape)
-
-model = MultinomialNB()
-model.fit(x_train, y_train)
-
-y_pred = model.predict(x_test)
-
-ac = accuracy_score(y_test, y_pred)
-
-print("Accuracy is :", ac)
+min_values = [1, 2, 3]
+max_values = [1, 2, 3]
 
 
-def predict(text):
+def predict(text, cv, model):
     x = cv.transform([text]).toarray()  # converting text to bag of words model (Vector)
     lang = model.predict(x)  # predicting the language
     lang = le.inverse_transform(lang)  # finding the language corresponding the the predicted value
     print("The langauge is in", lang[0])
 
 
-predict("my name is Simon")
+def run():
+    root_out_path = "out/"
+    if not os.path.exists(root_out_path):
+        os.makedirs(root_out_path)
+    for min_value in min_values:
+        for max_value in max_values:
+            print("\n", max_value, min_value)
+            if max_value >= min_value:
 
-predict("mi nombre es Simon")
+                cv = CountVectorizer(analyzer='char', ngram_range=(min_value, max_value))
 
-predict("Hei jeg heter Simon")
+                x_train_t = cv.fit_transform(x_train)
+                x_test_t = cv.transform(x_test)
 
-predict("Her vil vi i dagane framover dele dikt av Olav H. Hauge. Vi vil la Hauges poesi gje våre eigne tankar både pause og perspektiv. Gjer som Hauge, og lat diktet vere ei lauvhytte eller eit snøhus som du kan krype inn i, og vere i, i stille kveldar.")
+                print("Vectorized x_train, x_test: ")
+                print(x_train_t.shape)
+                print(x_test_t.shape)
 
-predict("내 이름은 zisun")
+                model = MultinomialNB()
+                model.fit(x_train_t, y_train)
 
-predict("меня зовут цисун")
+                y_pred = model.predict(x_test_t)
+
+                ac = accuracy_score(y_test, y_pred) * 100
+
+                print(f"Accuracy is: {ac:.1f}%")
+
+                file = open(os.path.join(root_out_path, f"model{min_value}{max_value}acc{int(ac)}.sav"), 'wb')
+                pickle.dump(model, file)
+
+
+run()
+
+
+
+
+
+
