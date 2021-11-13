@@ -10,6 +10,7 @@ import os
 
 from rnn.rnn_model import CharRNNClassifier
 from utils.Dataloader import Dataloader
+from rnn.dictionary import Dictionary
 
 seed = 1111
 random.seed(seed)
@@ -59,6 +60,10 @@ class Dictionary(object):
 
     def __len__(self):
         return len(self.tokens)
+
+
+root_out_path = "out/"
+
 
 
 char_dictionary = Dictionary()
