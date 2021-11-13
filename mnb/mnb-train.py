@@ -57,6 +57,7 @@ y_test = le.transform(y_test)
 
 min_values = [1, 2, 3]
 max_values = [1, 2, 3]
+analyzers = ["word", "char"]
 
 
 def predict(text, cv, model):
@@ -72,29 +73,31 @@ def run():
         os.makedirs(root_out_path)
     for min_value in min_values:
         for max_value in max_values:
-            print("\n", max_value, min_value)
-            if max_value >= min_value:
+            for analyzer in analyzers:
+                print("\n", max_value, min_value)
+                if max_value >= min_value:
 
-                cv = CountVectorizer(analyzer='char', ngram_range=(min_value, max_value))
+                    cv = CountVectorizer(analyzer=analyzer, ngram_range=(min_value, max_value))
 
-                x_train_t = cv.fit_transform(x_train)
-                x_test_t = cv.transform(x_test)
+                    x_train_t = cv.fit_transform(x_train)
+                    x_test_t = cv.transform(x_test)
 
-                print("Vectorized x_train, x_test: ")
-                print(x_train_t.shape)
-                print(x_test_t.shape)
+                    print("Vectorized x_train, x_test: ")
+                    print(x_train_t.shape)
+                    print(x_test_t.shape)
 
-                model = MultinomialNB()
-                model.fit(x_train_t, y_train)
+                    model = MultinomialNB()
+                    model.fit(x_train_t, y_train)
 
-                y_pred = model.predict(x_test_t)
+                    y_pred = model.predict(x_test_t)
 
-                ac = accuracy_score(y_test, y_pred) * 100
+                    ac = accuracy_score(y_test, y_pred) * 100
 
-                print(f"Accuracy is: {ac:.1f}%")
+                    print(f"Accuracy is: {ac:.1f}%")
 
-                file = open(os.path.join(root_out_path, f"model{min_value}{max_value}acc{int(ac)}.sav"), 'wb')
-                pickle.dump(model, file)
+                    file = open(os.path.join(root_out_path, f"model{analyzer}{min_value}{max_value}ac{int(ac)}.sav"), 'wb')
+                    pickle.dump(model, file)
+                    file.close()
 
 
 run()
