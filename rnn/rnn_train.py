@@ -265,14 +265,12 @@ def run():
             plt.plot(range(1, len(valid_accuracy) + 1), valid_accuracy)
             plt.xlabel('epoch')
             plt.ylabel('Accuracy')
-            plt.show()
             plt.savefig(os.path.join(hidden_out_path, f'acc.png'))
 
             plt.plot(range(1, len(train_loss) + 1), train_loss)
             plt.plot(range(1, len(valid_loss) + 1), valid_loss)
             plt.xlabel('epoch')
             plt.ylabel('Loss')
-            plt.show()
             plt.savefig(os.path.join(hidden_out_path, f'loss.png'))
 
 
