@@ -17,9 +17,9 @@ else:
 
 print(device)
 
-char_dictionary, lang_dictionary = load_dictionary()
+char_dictionary, lang_dictionary = load_dictionary("out/")
 
-PATH = "out/gru/512/model15.pth"
+PATH = "out/gru/512/model.pth"
 ntokens = len(char_dictionary)
 input_size = ntokens
 embedding_size = 64

@@ -54,8 +54,7 @@ def write_dictionary():
         pickle.dump(language_dictionary, f2)
 
 
-def load_dictionary():
-    root_out_path = "out/"
+def load_dictionary(root_out_path):
     with open(f'{root_out_path}char_dic.txt', 'rb') as f1:
         char_dic = pickle.load(f1)
     with open(f'{root_out_path}lang_dic.txt', 'rb') as f2:
