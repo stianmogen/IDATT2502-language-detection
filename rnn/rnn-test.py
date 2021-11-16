@@ -19,15 +19,15 @@ print(device)
 
 char_dictionary, lang_dictionary = load_dictionary()
 
-PATH = "out/lstm/512/model15.pth"
+PATH = "out/gru/512/model15.pth"
 ntokens = len(char_dictionary)
 input_size = ntokens
 embedding_size = 64
 hidden_size = 512
 output_size = 235
-model = "lstm"
+model = "gru"
 num_layers = 1
-batch_size, token_size = 128, 1500
+batch_size, token_size = 64, 1200
 
 model = CharRNNClassifier(input_size=input_size, embedding_size=embedding_size, hidden_size=hidden_size, output_size=output_size, model=model, num_layers=num_layers)
 model.load_state_dict(torch.load(PATH))
@@ -110,5 +110,3 @@ test_data = [(x, y) for x, y in zip(x_test_idx, y_test_idx)]
 acc, loss = validate(model, criterion, test_data, batch_size, token_size)
 
 print(acc, loss)
-#f1.close()
-#f2.close()

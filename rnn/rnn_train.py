@@ -210,7 +210,7 @@ model = CharRNNClassifier(ntokens, embedding_size, hidden_size, nlabels, pad_idx
 optimizer = torch.optim.Adam(model.parameters())
 '''
 
-batch_size, token_size = 128, 1500
+batch_size, token_size = 64, 1200
 epochs = 15
 
 
@@ -273,12 +273,14 @@ def run():
             plt.xlabel('epoch')
             plt.ylabel('Accuracy')
             plt.savefig(os.path.join(hidden_out_path, f'acc.png'))
+            plt.show()
 
             plt.plot(range(1, len(train_loss) + 1), train_loss)
             plt.plot(range(1, len(valid_loss) + 1), valid_loss)
             plt.xlabel('epoch')
             plt.ylabel('Loss')
             plt.savefig(os.path.join(hidden_out_path, f'loss.png'))
+            plt.show()
 
 
 run()
