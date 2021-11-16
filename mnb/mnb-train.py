@@ -66,8 +66,8 @@ def run():
             for min_value in range(1, max_value + 1):
                 type_out_path = f"{max_value}{min_value}/"
 
-                if not os.path.exists(type_out_path):
-                    os.makedirs(type_out_path)
+                if not os.path.exists(root_out_path + type_out_path):
+                    os.makedirs(root_out_path + type_out_path)
 
                 print("\n", max_value, min_value)
 
@@ -76,7 +76,7 @@ def run():
                 x_train_t = cv.fit_transform(x_train)
                 x_val_t = cv.transform(x_val)
 
-                file = open(os.path.join(type_out_path, "vectorizer"), 'wb')
+                file = open(os.path.join(root_out_path, type_out_path, "vectorizer"), 'wb')
                 pickle.dump(cv, file)
                 file.close()
 
@@ -93,7 +93,7 @@ def run():
 
                 print(f"Accuracy is: {ac:.1f}%")
 
-                file = open(os.path.join(type_out_path, "model.sav"), 'wb')
+                file = open(os.path.join(root_out_path + type_out_path, "model.sav"), 'wb')
                 pickle.dump(model, file)
                 file.close()
 

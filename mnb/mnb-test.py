@@ -13,7 +13,7 @@ _, _, _, _, x_test, y_test = dataloader.get_dataframes()
 path = "out/11/"
 
 analyzer = "char"
-vectorizer_path = path + "cv"
+vectorizer_path = path + "vectorizer"
 label_encoder_path = "labelencoder"
 model_path = path + "model.sav"
 
