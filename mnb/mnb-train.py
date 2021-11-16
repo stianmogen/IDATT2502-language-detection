@@ -3,14 +3,11 @@ import pickle
 import random
 import re
 
-import torch
 from sklearn.preprocessing import LabelEncoder
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score
 import numpy as np
-
-import pandas as pd
 
 from utils.Dataloader import Dataloader
 
@@ -18,46 +15,34 @@ seed = 1111
 random.seed(seed)
 np.random.RandomState(seed)
 
-device = ""
-if torch.cuda.is_available():
-    torch.cuda.empty_cache()
-    torch.cuda.manual_seed(seed)
-    device = torch.device("cuda:0")
-else:
-    torch.manual_seed(seed)
-    device = torch.device("cpu")
-
-print(device)
-
-# Constants
 
 INPUT_DIR = "../input/dataset"
 dataloader = Dataloader(INPUT_DIR)
-x_train, y_train, x_val, y_val, x_test, y_test = dataloader.get_dataframes()
+x_train, y_train, x_val, y_val, _, _ = dataloader.get_dataframes()
 
-print("x_train, x_test shape:")
+print("x_train, x_val shape:")
 print(x_train.shape)
-print(x_test.shape)
+print(x_val.shape)
 
 
 def remove_special(sentence):
-    return re.sub(r'[\\\\/:*«`\'?¿";!<>,.|()-_)(}{#$%@^&~+-=–—‘’“”„†•…′ⁿ№−、《》「」『』（），－：；]', ' ', sentence.lower().strip())
+    return re.sub(r'[\\/:*«`\'?¿";!<>,.|()-_)}{#$%@^&~+-=–—‘’“”„†•…′ⁿ№−、《》「」『』（），－：；]', ' ', sentence.lower().strip())
 
 
 x_train = x_train['sentence'].apply(remove_special)
 y_train = y_train['language']
 
-x_test = x_test['sentence'].apply(remove_special)
-y_test = y_test['language']
+x_val = x_val['sentence'].apply(remove_special)
+y_val = y_val['language']
 
 
 le = LabelEncoder()
 y_train = le.fit_transform(y_train)
-y_test = le.transform(y_test)
+y_val = le.transform(y_val)
 
 min_values = [1, 2, 3]
 max_values = [1, 2, 3]
-analyzers = ["word", "char"]
+analyzers = ["char", "word"]
 
 
 def predict(text, cv, model):
@@ -73,31 +58,32 @@ def run():
         os.makedirs(root_out_path)
     for min_value in min_values:
         for max_value in max_values:
-            for analyzer in analyzers:
-                print("\n", max_value, min_value)
-                if max_value >= min_value:
+            print("\n", max_value, min_value)
+            if max_value >= min_value:
 
-                    cv = CountVectorizer(analyzer=analyzer, ngram_range=(min_value, max_value))
+                cv = CountVectorizer(analyzer=analyzers[0], ngram_range=(min_value, max_value))
 
-                    x_train_t = cv.fit_transform(x_train)
-                    x_test_t = cv.transform(x_test)
+                x_train_t = cv.fit_transform(x_train)
+                x_val_t = cv.transform(x_val)
 
-                    print("Vectorized x_train, x_test: ")
-                    print(x_train_t.shape)
-                    print(x_test_t.shape)
+                print("Vectorized x_train, x_val: ")
+                print(x_train_t.shape)
+                print(x_val_t.shape)
 
-                    model = MultinomialNB()
-                    model.fit(x_train_t, y_train)
+                model = MultinomialNB()
+                model.fit(x_train_t, y_train)
 
-                    y_pred = model.predict(x_test_t)
+                print(model.classes_)
 
-                    ac = accuracy_score(y_test, y_pred) * 100
+                y_pred = model.predict(x_val_t)
 
-                    print(f"Accuracy is: {ac:.1f}%")
+                ac = accuracy_score(y_val, y_pred) * 100
 
-                    file = open(os.path.join(root_out_path, f"model{analyzer}{min_value}{max_value}ac{int(ac)}.sav"), 'wb')
-                    pickle.dump(model, file)
-                    file.close()
+                print(f"Accuracy is: {ac:.1f}%")
+
+                file = open(os.path.join(root_out_path, f"model{analyzers[0]}{min_value}{max_value}ac{int(ac)}.sav"), 'wb')
+                pickle.dump(model, file)
+                file.close()
 
 
 run()
