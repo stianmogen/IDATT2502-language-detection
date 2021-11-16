@@ -244,7 +244,7 @@ def run():
 
             model = CharRNNClassifier(ntokens, embedding_size, hidden_size, nlabels, model=model_type, pad_idx=pad_index,
                                       bidirectional=bidirectional).to(device)
-            optimizer = torch.optim.Adam(model.parameters())
+            optimizer = torch.optim.Adam(model.parameters(), lr=0.05)
             print(f'Training cross-validation model for {epochs} epochs')
             t0 = time.time()
             for epoch in range(1, epochs + 1):
