@@ -8,8 +8,10 @@ import time
 import matplotlib.pyplot as plt
 import os
 
+from rnn import dictionary
 from rnn.rnn_model import CharRNNClassifier
 from utils.Dataloader import Dataloader
+from rnn.dictionary import Dictionary
 
 seed = 1111
 random.seed(seed)
@@ -61,6 +63,10 @@ class Dictionary(object):
         return len(self.tokens)
 
 
+root_out_path = "out/"
+
+
+
 char_dictionary = Dictionary()
 pad_token = '<pad>'  # reserve index 0 for padding
 unk_token = '<unk>'  # reserve index 1 for unknown token
@@ -78,6 +84,7 @@ for lang in sorted(languages):
     language_dictionary.new_token(lang)
 print("Language vocabulary:", len(language_dictionary), "languages")
 
+char_dictionary, language_dictionary = dictionary.load_dictionary()
 
 x_train_idx = [np.array([char_dictionary.indicies[c] for c in line]) for line in x_train["sentence"]]
 y_train_idx = np.array([language_dictionary.indicies[lang] for lang in y_train["language"]])
@@ -86,7 +93,7 @@ x_val_idx = [np.array([char_dictionary.indicies[c] for c in line if c in char_di
 y_val_idx = np.array([language_dictionary.indicies[lang] for lang in y_val["language"]])
 
 x_test_idx = [np.array([char_dictionary.indicies[c] for c in line if c in char_dictionary.indicies]) for line in x_test["sentence"]]
-y_test_idx = np.array([language_dictionary.indicies[lang] for lang in y_val["language"]])
+y_test_idx = np.array([language_dictionary.indicies[lang] for lang in y_test["language"]])
 
 train_data = [(x, y) for x, y in zip(x_train_idx, y_train_idx)]
 val_data = [(x, y) for x, y in zip(x_val_idx, y_val_idx)]
@@ -203,7 +210,7 @@ model = CharRNNClassifier(ntokens, embedding_size, hidden_size, nlabels, pad_idx
 optimizer = torch.optim.Adam(model.parameters())
 '''
 
-batch_size, token_size = 128, 1500
+batch_size, token_size = 64, 1200
 epochs = 15
 
 
@@ -266,12 +273,14 @@ def run():
             plt.xlabel('epoch')
             plt.ylabel('Accuracy')
             plt.savefig(os.path.join(hidden_out_path, f'acc.png'))
+            plt.show()
 
             plt.plot(range(1, len(train_loss) + 1), train_loss)
             plt.plot(range(1, len(valid_loss) + 1), valid_loss)
             plt.xlabel('epoch')
             plt.ylabel('Loss')
             plt.savefig(os.path.join(hidden_out_path, f'loss.png'))
+            plt.show()
 
 
 run()
