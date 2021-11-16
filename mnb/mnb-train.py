@@ -53,7 +53,15 @@ y_test = y_test['language']
 
 le = LabelEncoder()
 y_train = le.fit_transform(y_train)
+
 y_test = le.transform(y_test)
+
+y_val = le.transform(y_val)
+
+with open("out/labelencoder", 'wb') as fout:
+    pickle.dump(le, fout)
+
+fout.close()
 
 min_values = [1, 2, 3]
 max_values = [1, 2, 3]
