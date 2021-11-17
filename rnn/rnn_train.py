@@ -84,7 +84,7 @@ for lang in sorted(languages):
     language_dictionary.new_token(lang)
 print("Language vocabulary:", len(language_dictionary), "languages")
 
-char_dictionary, language_dictionary = dictionary.load_dictionary()
+char_dictionary, language_dictionary = dictionary.load_dictionary(root_out_path)
 
 x_train_idx = [np.array([char_dictionary.indicies[c] for c in line]) for line in x_train["sentence"]]
 y_train_idx = np.array([language_dictionary.indicies[lang] for lang in y_train["language"]])
