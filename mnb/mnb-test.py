@@ -14,7 +14,9 @@ path = "out/11/"
 
 analyzer = "char"
 vectorizer_path = path + "vectorizer"
-label_encoder_path = "labelencoder"
+
+label_encoder_path = "out/labelencoder"
+
 model_path = path + "model.sav"
 
 
@@ -63,3 +65,4 @@ choice = ""
 while choice != "exit":
     choice = input("Enter your sentence: ")
     predict(choice, cv, model)
+
