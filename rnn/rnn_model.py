@@ -22,7 +22,10 @@ class CharRNNClassifier(torch.nn.Module):
             self.rnn = torch.nn.GRU(embedding_size, hidden_size, num_layers, bidirectional=bidirectional)
         elif self.model == "lstm":
             self.rnn = torch.nn.LSTM(embedding_size, hidden_size, num_layers, bidirectional=bidirectional)
-        self.h2o = torch.nn.Linear(hidden_size, output_size)
+        if bidirectional:
+            self.h2o = torch.nn.Linear(hidden_size * 2, output_size)
+        else:
+            self.h2o = torch.nn.Linear(hidden_size, output_size)
 
     def forward(self, input, input_lengths):
         # T x B

@@ -1,3 +1,4 @@
+import os
 import pickle
 
 from utils.Dataloader import Dataloader
@@ -20,24 +21,21 @@ class Dictionary(object):
         return len(self.tokens)
 
 
-def create_dictionary():
-    INPUT_DIR = "../input/dataset"
-    dataloader = Dataloader(INPUT_DIR)
-    x_train, y_train, _, _, _, _ = dataloader.get_dataframes()
+def create_dictionary(x, y):
 
     char_dictionary = Dictionary()
     pad_token = '<pad>'  # reserve index 0 for padding
     unk_token = '<unk>'  # reserve index 1 for unknown token
-    pad_index = char_dictionary.new_token(pad_token)
-    unk_index = char_dictionary.new_token(unk_token)
+    char_dictionary.new_token(pad_token)
+    char_dictionary.new_token(unk_token)
 
-    chars = set(''.join(x_train["sentence"]))
+    chars = set(''.join(x))
     for char in sorted(chars):
         char_dictionary.new_token(char)
     print("Character vocabulary:", len(char_dictionary), "UTF characters")
 
     language_dictionary = Dictionary()
-    languages = set(y_train["language"])
+    languages = set(y)
     for lang in sorted(languages):
         language_dictionary.new_token(lang)
     print("Language vocabulary:", len(language_dictionary), "languages")
@@ -45,19 +43,23 @@ def create_dictionary():
     return char_dictionary, language_dictionary
 
 
-def write_dictionary():
-    root_out_path = "out/"
-    char_dictionary, language_dictionary = create_dictionary()
-    with open(f'{root_out_path}char_dic.txt', 'wb') as f1:
+def write_dictionary(path, x, y):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    char_dictionary, language_dictionary = create_dictionary(x, y)
+    with open(f'{path}char_dic.txt', 'wb') as f1:
         pickle.dump(char_dictionary, f1)
-    with open(f'{root_out_path}lang_dic.txt', 'wb') as f2:
+    with open(f'{path}lang_dic.txt', 'wb') as f2:
         pickle.dump(language_dictionary, f2)
 
+    return char_dictionary, language_dictionary
 
-def load_dictionary(root_out_path):
-    with open(f'{root_out_path}char_dic.txt', 'rb') as f1:
+
+def load_dictionary(path):
+    with open(f'{path}char_dic.txt', 'rb') as f1:
         char_dic = pickle.load(f1)
-    with open(f'{root_out_path}lang_dic.txt', 'rb') as f2:
+    with open(f'{path}lang_dic.txt', 'rb') as f2:
         lang_dic = pickle.load(f2)
 
     return char_dic, lang_dic

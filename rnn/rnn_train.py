@@ -11,7 +11,7 @@ import os
 from rnn import dictionary
 from rnn.rnn_model import CharRNNClassifier
 from utils.Dataloader import Dataloader
-from rnn.dictionary import Dictionary
+from rnn.dictionary import Dictionary, create_dictionary, write_dictionary
 
 seed = 1111
 random.seed(seed)
@@ -27,7 +27,6 @@ else:
     device = torch.device("cpu")
 
 print(device)
-
 
 INPUT_DIR = "../input/dataset"
 dataloader = Dataloader(INPUT_DIR)
@@ -45,54 +44,24 @@ print("Test:")
 print(x_test.shape)
 print(y_test.shape)
 
-
-class Dictionary(object):
-    def __init__(self):
-        self.indicies = {}
-        self.tokens = []
-
-    def new_token(self, token):
-        # Adds the token to the list, if not already added
-        # The index is set to the length of the token array - 1
-        if token not in self.indicies:
-            self.tokens.append(token)
-            self.indicies[token] = len(self.tokens) - 1
-        return self.indicies[token]
-
-    def __len__(self):
-        return len(self.tokens)
-
-
 root_out_path = "out/"
+if not os.path.exists(root_out_path):
+    os.makedirs(root_out_path)
 
+char_dictionary, language_dictionary = write_dictionary(root_out_path, x_train["sentence"], y_train["language"])
 
-
-char_dictionary = Dictionary()
-pad_token = '<pad>'  # reserve index 0 for padding
-unk_token = '<unk>'  # reserve index 1 for unknown token
-pad_index = char_dictionary.new_token(pad_token)
-unk_index = char_dictionary.new_token(unk_token)
-
-chars = set(''.join(x_train["sentence"]))
-for char in sorted(chars):
-    char_dictionary.new_token(char)
-print("Character vocabulary:", len(char_dictionary), "UTF characters")
-
-language_dictionary = Dictionary()
-languages = set(y_train["language"])
-for lang in sorted(languages):
-    language_dictionary.new_token(lang)
-print("Language vocabulary:", len(language_dictionary), "languages")
-
-char_dictionary, language_dictionary = dictionary.load_dictionary(root_out_path)
+pad_index = 0
+unk_index = 1
 
 x_train_idx = [np.array([char_dictionary.indicies[c] for c in line]) for line in x_train["sentence"]]
 y_train_idx = np.array([language_dictionary.indicies[lang] for lang in y_train["language"]])
 
-x_val_idx = [np.array([char_dictionary.indicies[c] for c in line if c in char_dictionary.indicies]) for line in x_val["sentence"]]
+x_val_idx = [np.array([char_dictionary.indicies[c] for c in line if c in char_dictionary.indicies]) for line in
+             x_val["sentence"]]
 y_val_idx = np.array([language_dictionary.indicies[lang] for lang in y_val["language"]])
 
-x_test_idx = [np.array([char_dictionary.indicies[c] for c in line if c in char_dictionary.indicies]) for line in x_test["sentence"]]
+x_test_idx = [np.array([char_dictionary.indicies[c] for c in line if c in char_dictionary.indicies]) for line in
+              x_test["sentence"]]
 y_test_idx = np.array([language_dictionary.indicies[lang] for lang in y_test["language"]])
 
 train_data = [(x, y) for x, y in zip(x_train_idx, y_train_idx)]
@@ -198,89 +167,94 @@ def validate(model, criterion, data, batch_size, token_size):
     return dev_acc, total_loss
 
 
-#hidden_size = 512
 embedding_size = 64
-bidirectional = False
 ntokens = len(char_dictionary)
 nlabels = len(language_dictionary)
-
-'''
-model = CharRNNClassifier(ntokens, embedding_size, hidden_size, nlabels, pad_idx=pad_index,
-                          bidirectional=bidirectional).to(device)
-optimizer = torch.optim.Adam(model.parameters())
-'''
-
-batch_size, token_size = 64, 1200
+batch_size = 64
+token_size = 1200
 epochs = 15
-
 
 hidden_sizes = [128, 256, 512]
 model_types = ["lstm", "gru"]
+bidirectional_types = {"bidirectional": False, "unidirectional": True}
 
 
 def run():
-    root_out_path = "out/"
-    if not os.path.exists(root_out_path):
-        os.makedirs(root_out_path)
 
-    for model_type in model_types:
+    for bidirectional_type in bidirectional_types:
 
-        type_out_path = root_out_path + model_type + "/"
+        bi_type_path = root_out_path + bidirectional_type + "/"
+        if not os.path.exists(bi_type_path):
+            os.makedirs(bi_type_path)
 
-        if not os.path.exists(type_out_path):
-            os.makedirs(type_out_path)
+        for model_type in model_types:
 
-        for hidden_size in hidden_sizes:
+            model_out_path = bi_type_path + model_type + "/"
+            if not os.path.exists(model_out_path):
+                os.makedirs(model_out_path)
 
-            train_accuracy = []
-            valid_accuracy = []
-            train_loss = []
-            valid_loss = []
-            valid_max = 0
+            for hidden_size in hidden_sizes:
 
-            hidden_out_path = type_out_path + str(hidden_size) + "/"
-            if not os.path.exists(hidden_out_path):
-                os.makedirs(hidden_out_path)
+                hidden_out_path = model_out_path + str(hidden_size) + "/"
+                if not os.path.exists(hidden_out_path):
+                    os.makedirs(hidden_out_path)
 
-            model = CharRNNClassifier(ntokens, embedding_size, hidden_size, nlabels, model=model_type, pad_idx=pad_index,
-                                      bidirectional=bidirectional).to(device)
-            optimizer = torch.optim.Adam(model.parameters(), lr=0.05)
-            print(f'Training cross-validation model for {epochs} epochs')
-            t0 = time.time()
-            for epoch in range(1, epochs + 1):
-                acc, loss = train(model, optimizer, train_data, batch_size, token_size)
+                train_accuracy = []
+                valid_accuracy = []
+                train_loss = []
+                valid_loss = []
+                valid_max = 0
 
-                train_accuracy.append(acc)
-                train_loss.append(loss)
-                print(f'| epoch {epoch:03d} | train accuracy={acc:.1f}% | train loss={loss} ({time.time() - t0:.0f}s)')
+                model = CharRNNClassifier(ntokens, embedding_size, hidden_size, nlabels, model=model_type,
+                                          pad_idx=pad_index,
+                                          bidirectional=bidirectional_types[bidirectional_type]).to(device)
 
-                acc, loss = validate(model, criterion, val_data, batch_size, token_size)
-                if acc > valid_max:
-                    valid_max = acc
-                    torch.save(model.state_dict(), os.path.join(hidden_out_path, f"model{epoch}.pth"))
+                optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+                scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
+                print(f'Training cross-validation model for {epochs} epochs')
 
-                valid_accuracy.append(acc)
-                valid_loss.append(loss)
-                print(f'| epoch {epoch:03d} | valid accuracy={acc:.1f}% | valid loss={loss}')
+                t0 = time.time()
+                for epoch in range(1, epochs + 1):
+                    acc, loss = train(model, optimizer, train_data, batch_size, token_size)
 
-            print(model)
-            for name, param in model.named_parameters():
-                print(f'{name:20} {param.numel()} {list(param.shape)}')
-            print(f'TOTAL                {sum(p.numel() for p in model.parameters())}')
+                    train_accuracy.append(acc)
+                    train_loss.append(loss)
 
-            plt.plot(range(1, len(train_accuracy) + 1), train_accuracy)
-            plt.plot(range(1, len(valid_accuracy) + 1), valid_accuracy)
-            plt.xlabel('epoch')
-            plt.ylabel('Accuracy')
-            plt.savefig(os.path.join(hidden_out_path, f'acc.png'))
-            plt.show()
+                    print("Learning rate:", scheduler.get_last_lr())
+                    scheduler.step()
+                    print(
+                        f'| epoch {epoch:03d} | train accuracy={acc:.1f}% | train loss={loss} ({time.time() - t0:.0f}s)')
 
-            plt.plot(range(1, len(train_loss) + 1), train_loss)
-            plt.plot(range(1, len(valid_loss) + 1), valid_loss)
-            plt.xlabel('epoch')
-            plt.ylabel('Loss')
-            plt.savefig(os.path.join(hidden_out_path, f'loss.png'))
-            plt.show()
+                    acc, loss = validate(model, criterion, val_data, batch_size, token_size)
+                    if acc > valid_max:
+                        valid_max = acc
+                        torch.save(model.state_dict(), os.path.join(hidden_out_path, f"model{epoch}.pth"))
+
+                    valid_accuracy.append(acc)
+                    valid_loss.append(loss)
+                    print(f'| epoch {epoch:03d} | valid accuracy={acc:.1f}% | valid loss={loss}')
+                    time.sleep(10) # Cooling down gpu
+
+                print(model)
+                for name, param in model.named_parameters():
+                    print(f'{name:20} {param.numel()} {list(param.shape)}')
+                print(f'TOTAL                {sum(p.numel() for p in model.parameters())}')
+
+                plt.plot(range(1, len(train_accuracy) + 1), train_accuracy)
+                plt.plot(range(1, len(valid_accuracy) + 1), valid_accuracy)
+                plt.xlabel('epoch')
+                plt.ylabel('Accuracy')
+                plt.savefig(os.path.join(hidden_out_path, f'acc.png'))
+                plt.show()
+
+                plt.plot(range(1, len(train_loss) + 1), train_loss)
+                plt.plot(range(1, len(valid_loss) + 1), valid_loss)
+                plt.xlabel('epoch')
+                plt.ylabel('Loss')
+                plt.savefig(os.path.join(hidden_out_path, f'loss.png'))
+                plt.show()
+
+                time.sleep(60)  # Cooling down gpu
 
 
 run()
