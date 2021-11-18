@@ -1,6 +1,5 @@
 import random
 import numpy as np
-import pandas as pd
 import torch
 import torch.nn
 import time
@@ -8,10 +7,9 @@ import time
 import matplotlib.pyplot as plt
 import os
 
-from rnn import dictionary
 from rnn.rnn_model import CharRNNClassifier
 from utils.Dataloader import Dataloader
-from rnn.dictionary import Dictionary, create_dictionary, write_dictionary
+from rnn.dictionary import write_dictionary
 
 seed = 1111
 random.seed(seed)
@@ -30,7 +28,7 @@ print(device)
 
 INPUT_DIR = "../input/dataset"
 dataloader = Dataloader(INPUT_DIR)
-x_train, y_train, x_val, y_val, x_test, y_test = dataloader.get_dataframes()
+x_train, y_train, x_val, y_val, _, _ = dataloader.get_dataframes()
 
 print("Train:")
 print(x_train.shape)
@@ -39,10 +37,6 @@ print(y_train.shape)
 print("Val:")
 print(x_val.shape)
 print(y_val.shape)
-
-print("Test:")
-print(x_test.shape)
-print(y_test.shape)
 
 root_out_path = "out/"
 if not os.path.exists(root_out_path):
@@ -59,10 +53,6 @@ y_train_idx = np.array([language_dictionary.indicies[lang] for lang in y_train["
 x_val_idx = [np.array([char_dictionary.indicies[c] for c in line if c in char_dictionary.indicies]) for line in
              x_val["sentence"]]
 y_val_idx = np.array([language_dictionary.indicies[lang] for lang in y_val["language"]])
-
-x_test_idx = [np.array([char_dictionary.indicies[c] for c in line if c in char_dictionary.indicies]) for line in
-              x_test["sentence"]]
-y_test_idx = np.array([language_dictionary.indicies[lang] for lang in y_test["language"]])
 
 train_data = [(x, y) for x, y in zip(x_train_idx, y_train_idx)]
 val_data = [(x, y) for x, y in zip(x_val_idx, y_val_idx)]
