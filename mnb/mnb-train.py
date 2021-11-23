@@ -48,9 +48,6 @@ fout.close()
 
 min_values = [1, 2, 3]
 max_values = [1, 2, 3]
-analyzers = ["word", "char"]
-
-y_val = le.transform(y_val)
 
 with open("labelencoder", 'wb') as fout:
     pickle.dump(le, fout)

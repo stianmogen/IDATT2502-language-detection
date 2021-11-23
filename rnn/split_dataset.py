@@ -26,20 +26,96 @@ def make_split(input_filepath, output_filepath, test_percent, valid_percent, enc
     y_train_data += y_test_data
 
     ratio = valid_percent / (test_percent + valid_percent)
-    x_train_data, x_test_data, y_train_data, y_test_data = train_test_split(x_train_data, y_train_data, test_size=(test_percent + valid_percent), random_state=42)
-    x_test_data, x_val_data, y_test_data, y_val_data = train_test_split(x_test_data, y_test_data, test_size=ratio, random_state=42)
+    x_train_data, x_test_data, y_train_data, y_test_data = train_test_split(x_train_data, y_train_data,
+                                                                            test_size=(test_percent + valid_percent),
+                                                                            random_state=42)
+    x_test_data, x_val_data, y_test_data, y_val_data = train_test_split(x_test_data, y_test_data, test_size=ratio,
+                                                                        random_state=42)
 
     for i in range(len(x_train_data)):
-        x_train_split.write(x_train_data[i])
-        y_train_split.write(y_train_data[i])
+        if (y_train_data[i] == y_train_data[0] or
+                y_train_data[i] == y_train_data[1] or
+                y_train_data[i] == y_train_data[2] or
+                y_train_data[i] == y_train_data[3] or
+                y_train_data[i] == y_train_data[4] or
+                y_train_data[i] == y_train_data[5] or
+                y_train_data[i] == y_train_data[6] or
+                y_train_data[i] == y_train_data[7] or
+                y_train_data[i] == y_train_data[8] or
+                y_train_data[i] == y_train_data[9] or
+                y_train_data[i] == y_train_data[10] or
+                y_train_data[i] == y_train_data[11] or
+                y_train_data[i] == y_train_data[12] or
+                y_train_data[i] == y_train_data[13] or
+                y_train_data[i] == y_train_data[14] or
+                y_train_data[i] == y_train_data[15] or
+                y_train_data[i] == y_train_data[16] or
+                y_train_data[i] == y_train_data[17] or
+                y_train_data[i] == y_train_data[18] or
+                y_train_data[i] == y_train_data[19] or
+                y_train_data[i] == y_train_data[20] or
+                y_train_data[i] == y_train_data[21] or
+                #y_train_data[i] == y_train_data[22] or
+                y_train_data[i] == y_train_data[23]):
+            print(y_train_data[i], i)
+            x_train_split.write(x_train_data[i])
+            y_train_split.write(y_train_data[i])
 
     for i in range(len(x_val_data)):
-        x_valid_split.write(x_val_data[i])
-        y_valid_split.write(y_val_data[i])
+        if  (y_val_data[i] == y_train_data[0] or
+                y_val_data[i] == y_train_data[1] or
+                y_val_data[i] == y_train_data[2] or
+                y_val_data[i] == y_train_data[3] or
+                y_val_data[i] == y_train_data[4] or
+                y_val_data[i] == y_train_data[5] or
+                y_val_data[i] == y_train_data[6] or
+                y_val_data[i] == y_train_data[7] or
+                y_val_data[i] == y_train_data[8] or
+                y_val_data[i] == y_train_data[9] or
+                y_val_data[i] == y_train_data[10] or
+                y_val_data[i] == y_train_data[11] or
+                y_val_data[i] == y_train_data[12] or
+                y_val_data[i] == y_train_data[13] or
+                y_val_data[i] == y_train_data[14] or
+                y_val_data[i] == y_train_data[15] or
+                y_val_data[i] == y_train_data[16] or
+                y_val_data[i] == y_train_data[17] or
+                y_val_data[i] == y_train_data[18] or
+                y_val_data[i] == y_train_data[19] or
+                y_val_data[i] == y_train_data[20] or
+                y_val_data[i] == y_train_data[21] or
+                #y_val_data[i] == y_train_data[22] or
+                y_val_data[i] == y_train_data[23]):
+            x_valid_split.write(x_val_data[i])
+            y_valid_split.write(y_val_data[i])
 
     for i in range(len(x_test_data)):
-        x_test_split.write(x_test_data[i])
-        y_test_split.write(y_test_data[i])
+        if (y_test_data[i] == y_train_data[0] or
+                y_test_data[i] == y_train_data[1] or
+                y_test_data[i] == y_train_data[2] or
+                y_test_data[i] == y_train_data[3] or
+                y_test_data[i] == y_train_data[4] or
+                y_test_data[i] == y_train_data[5] or
+                y_test_data[i] == y_train_data[6] or
+                y_test_data[i] == y_train_data[7] or
+                y_test_data[i] == y_train_data[8] or
+                y_test_data[i] == y_train_data[9] or
+                y_test_data[i] == y_train_data[10] or
+                y_test_data[i] == y_train_data[11] or
+                y_test_data[i] == y_train_data[12] or
+                y_test_data[i] == y_train_data[13] or
+                y_test_data[i] == y_train_data[14] or
+                y_test_data[i] == y_train_data[15] or
+                y_test_data[i] == y_train_data[16] or
+                y_test_data[i] == y_train_data[17] or
+                y_test_data[i] == y_train_data[18] or
+                y_test_data[i] == y_train_data[19] or
+                y_test_data[i] == y_train_data[20] or
+                y_test_data[i] == y_train_data[21] or
+                #y_test_data[i] == y_train_data[22] or
+                y_test_data[i] == y_train_data[23]):
+            x_test_split.write(x_test_data[i])
+            y_test_split.write(y_test_data[i])
 
     x_train.close()
     y_train.close()

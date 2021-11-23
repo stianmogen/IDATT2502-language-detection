@@ -164,9 +164,9 @@ batch_size = 64
 token_size = 1200
 epochs = 15
 
-hidden_sizes = [128, 256, 512]
+hidden_sizes = [512]
 model_types = ["lstm", "gru"]
-bidirectional_types = {"bidirectional": False, "unidirectional": True}
+bidirectional_types = {"bidirectional": True, "unidirectional": False}
 
 
 def run():

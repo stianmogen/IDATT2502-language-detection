@@ -37,7 +37,7 @@ PATH = "out/" + direction + "/" + model + "/" + str(hidden_size) + "/model.pth"
 ntokens = len(char_dictionary)
 input_size = ntokens
 embedding_size = 64
-output_size = 235
+output_size = 23
 num_layers = 1
 batch_size, token_size = 64, 1200
 
@@ -130,8 +130,15 @@ acc, loss, y_pred, y_actual = validate(model, criterion, test_data, batch_size, 
 
 cm = confusion_matrix(y_actual, y_pred)
 plt.figure(figsize=(150, 100))
-sns.heatmap(cm, annot=True)
+ax= plt.subplot()
 plt.savefig("confusionmatrix.png")
-plt.show()
 
+# labels, title and ticks
+ax.set_xlabel('Predicted labels')
+ax.set_ylabel('True labels')
+ax.set_title('Confusion Matrix')
+ax.xaxis.set_ticklabels(lang_dictionary.tokens)
+ax.yaxis.set_ticklabels(lang_dictionary.tokens)
+
+plt.show()
 print(acc, loss)
