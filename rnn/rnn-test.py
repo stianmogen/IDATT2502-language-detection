@@ -1,7 +1,12 @@
 import random
+
+import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import pickle
+import seaborn as sns
+
+from sklearn.metrics import confusion_matrix
 
 from rnn.dictionary import Dictionary
 from rnn.dictionary import load_dictionary
@@ -19,17 +24,24 @@ print(device)
 
 char_dictionary, lang_dictionary = load_dictionary("out/")
 
-PATH = "out/gru/512/model.pth"
+model = "gru"
+hidden_size = 512
+bidirectional = True
+
+direction = "unidirectional"
+if bidirectional:
+    direction = "bidirectional"
+
+PATH = "out/" + direction + "/" + model + "/" + str(hidden_size) + "/model.pth"
+
 ntokens = len(char_dictionary)
 input_size = ntokens
 embedding_size = 64
-hidden_size = 512
 output_size = 235
-model = "gru"
 num_layers = 1
 batch_size, token_size = 64, 1200
 
-model = CharRNNClassifier(input_size=input_size, embedding_size=embedding_size, hidden_size=hidden_size, output_size=output_size, model=model, num_layers=num_layers)
+model = CharRNNClassifier(input_size=input_size, embedding_size=embedding_size, hidden_size=hidden_size, output_size=output_size, model=model, num_layers=num_layers, bidirectional=bidirectional)
 model.load_state_dict(torch.load(PATH))
 model = model.to(device)
 model.eval()
@@ -82,7 +94,8 @@ def validate(model, criterion, data, batch_size, token_size):
     total_loss = 0
     ncorrect = 0
     nsentences = 0
-
+    y_pred = []
+    y_actual = []
     with torch.no_grad():
         for batch in pool_generator(data, batch_size, token_size):
             # Get input and target sequences from batch
@@ -94,6 +107,12 @@ def validate(model, criterion, data, batch_size, token_size):
             X = torch.nn.utils.rnn.pad_sequence(X).to(device)
 
             answer = model(X, X_lengths)
+
+            for max in torch.max(answer, 1)[1]:
+                y_pred.append(max.item())
+            for value in y:
+                y_actual.append(value.item())
+
             loss = criterion(answer, y)
 
             # Validation statistics
@@ -103,10 +122,16 @@ def validate(model, criterion, data, batch_size, token_size):
 
         total_loss = total_loss / nsentences
         dev_acc = 100 * ncorrect / nsentences
-    return dev_acc, total_loss
+    return dev_acc, total_loss, y_pred, y_actual
 
 
 test_data = [(x, y) for x, y in zip(x_test_idx, y_test_idx)]
-acc, loss = validate(model, criterion, test_data, batch_size, token_size)
+acc, loss, y_pred, y_actual = validate(model, criterion, test_data, batch_size, token_size)
+
+cm = confusion_matrix(y_actual, y_pred)
+plt.figure(figsize=(150, 100))
+sns.heatmap(cm, annot=True)
+plt.savefig("confusionmatrix.png")
+plt.show()
 
 print(acc, loss)
