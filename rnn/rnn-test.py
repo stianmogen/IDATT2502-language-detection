@@ -53,6 +53,7 @@ _, _, _, _, x_test, y_test = dataloader.get_dataframes()
 x_test_idx = [np.array([char_dictionary.indicies[c] for c in line if c in char_dictionary.indicies]) for line in x_test["sentence"]]
 y_test_idx = np.array([lang_dictionary.indicies[lang] for lang in y_test["language"]])
 
+print(lang_dictionary.indicies)
 
 def batch_generator(data, batch_size, token_size):
     "Yield elements from data in chunks with a maximum of batch_size sequences"
@@ -129,9 +130,10 @@ test_data = [(x, y) for x, y in zip(x_test_idx, y_test_idx)]
 acc, loss, y_pred, y_actual = validate(model, criterion, test_data, batch_size, token_size)
 
 cm = confusion_matrix(y_actual, y_pred)
-plt.figure(figsize=(150, 100))
+
+plt.figure(figsize=(12, 9))
 ax= plt.subplot()
-plt.savefig("confusionmatrix.png")
+sns.heatmap(cm, annot=True, fmt='g', ax=ax)
 
 # labels, title and ticks
 ax.set_xlabel('Predicted labels')
@@ -140,5 +142,6 @@ ax.set_title('Confusion Matrix')
 ax.xaxis.set_ticklabels(lang_dictionary.tokens)
 ax.yaxis.set_ticklabels(lang_dictionary.tokens)
 
+plt.savefig("confusionmatrix.png")
 plt.show()
 print(acc, loss)
