@@ -10,6 +10,9 @@ import os
 from rnn.rnn_model import CharRNNClassifier
 from utils.Dataloader import Dataloader
 from rnn.dictionary import write_dictionary
+from utils.batch_generator import pool_generator
+from utils.create_dir import create_dir
+from utils.model_validator import validate
 
 seed = 1111
 random.seed(seed)
@@ -58,38 +61,6 @@ train_data = [(x, y) for x, y in zip(x_train_idx, y_train_idx)]
 val_data = [(x, y) for x, y in zip(x_val_idx, y_val_idx)]
 
 
-def batch_generator(data, batch_size, token_size):
-    "Yield elements from data in chunks with a maximum of batch_size sequences"
-    minibatch, sequences_count = [], 0
-    for ex in data:
-        seq_len = len(ex[0])
-        if seq_len > token_size:
-            ex = (ex[0][:token_size], ex[1])
-        minibatch.append(ex)
-        sequences_count += 1
-        if sequences_count == batch_size:
-            yield minibatch
-            minibatch, sequences_count = [], 0
-        elif sequences_count > batch_size:
-            yield minibatch[:-1]
-            minibatch, sequences_count = minibatch[-1:], 1
-    if minibatch:
-        yield minibatch
-
-
-def pool_generator(data, batch_size, token_size, shuffle=False):
-    "Divides into buckets of 100 * batchsize -> sorts within each bucket -> sends batches of size batchsize"
-    for p in batch_generator(data, batch_size * 100, token_size * 100):
-        p_batch = batch_generator(sorted(p, key=lambda t: len(t[0]), reverse=True), batch_size, token_size)
-        p_list = list(p_batch)
-        if shuffle:
-            for b in random.sample(p_list, len(p_list)):
-                yield b
-        else:
-            for b in p_list:
-                yield b
-
-
 criterion = torch.nn.CrossEntropyLoss(reduction='sum')
 
 
@@ -127,36 +98,6 @@ def train(model, optimizer, data, batch_size, token_size, max_norm=1):
     return accuracy, total_loss
 
 
-def validate(model, criterion, data, batch_size, token_size):
-    model.eval()
-
-    total_loss = 0
-    ncorrect = 0
-    nsentences = 0
-
-    with torch.no_grad():
-        for batch in pool_generator(data, batch_size, token_size):
-            # Get input and target sequences from batch
-            X = [torch.from_numpy(d[0]) for d in batch]
-            X_lengths = torch.tensor([x.numel() for x in X], dtype=torch.long)
-            y = torch.tensor([d[1] for d in batch], dtype=torch.long, device=device)
-
-            # Pad the input sequences to create a matrix
-            X = torch.nn.utils.rnn.pad_sequence(X).to(device)
-
-            answer = model(X, X_lengths)
-            loss = criterion(answer, y)
-
-            # Validation statistics
-            total_loss += loss.item()
-            ncorrect += (torch.max(answer, 1)[1] == y).sum().item()
-            nsentences += y.numel()
-
-        total_loss = total_loss / nsentences
-        dev_acc = 100 * ncorrect / nsentences
-    return dev_acc, total_loss
-
-
 embedding_size = 64
 ntokens = len(char_dictionary)
 nlabels = len(language_dictionary)
@@ -164,30 +105,23 @@ batch_size = 64
 token_size = 1200
 epochs = 15
 
+
 hidden_sizes = [128, 256, 512]
 model_types = ["lstm", "gru"]
 bidirectional_types = {"bidirectional": False, "unidirectional": True}
 
 
+
 def run():
 
     for bidirectional_type in bidirectional_types:
-
-        bi_type_path = root_out_path + bidirectional_type + "/"
-        if not os.path.exists(bi_type_path):
-            os.makedirs(bi_type_path)
+        bi_type_path = create_dir(root_out_path, bidirectional_type)
 
         for model_type in model_types:
-
-            model_out_path = bi_type_path + model_type + "/"
-            if not os.path.exists(model_out_path):
-                os.makedirs(model_out_path)
+            model_out_path = create_dir(bi_type_path, model_type)
 
             for hidden_size in hidden_sizes:
-
-                hidden_out_path = model_out_path + str(hidden_size) + "/"
-                if not os.path.exists(hidden_out_path):
-                    os.makedirs(hidden_out_path)
+                hidden_out_path = create_dir(model_out_path, str(hidden_size))
 
                 train_accuracy = []
                 valid_accuracy = []
@@ -215,7 +149,7 @@ def run():
                     print(
                         f'| epoch {epoch:03d} | train accuracy={acc:.1f}% | train loss={loss} ({time.time() - t0:.0f}s)')
 
-                    acc, loss = validate(model, criterion, val_data, batch_size, token_size)
+                    acc, loss, _, _ = validate(model, criterion, val_data, batch_size, token_size, device)
                     if acc > valid_max:
                         valid_max = acc
                         torch.save(model.state_dict(), os.path.join(hidden_out_path, f"model{epoch}.pth"))
@@ -248,40 +182,3 @@ def run():
 
 
 run()
-
-'''
-print(f'Training cross-validation model for {epochs} epochs')
-t0 = time.time()
-for epoch in range(1, epochs + 1):
-    acc, loss = train(model, optimizer, train_data, batch_size, token_size)
-
-    train_accuracy.append(acc)
-    train_loss.append(loss)
-    print(f'| epoch {epoch:03d} | train accuracy={acc:.1f}% | train loss={loss} ({time.time() - t0:.0f}s)')
-
-    acc, loss = validate(model, criterion, val_data, batch_size, token_size)
-    if(acc > valid_max):
-        valid_max = acc
-        torch.save(model.state_dict(), os.path.join(model_out_path, f"model{epoch}.pth"))
-
-    valid_accuracy.append(acc)
-    valid_loss.append(loss)
-    print(f'| epoch {epoch:03d} | valid accuracy={acc:.1f}% | valid loss={loss}')
-
-print(model)
-for name, param in model.named_parameters():
-    print(f'{name:20} {param.numel()} {list(param.shape)}')
-print(f'TOTAL                {sum(p.numel() for p in model.parameters())}')
-
-plt.plot(range(1, len(train_accuracy) + 1), train_accuracy)
-plt.plot(range(1, len(valid_accuracy) + 1), valid_accuracy)
-plt.xlabel('epoch')
-plt.ylabel('Accuracy')
-plt.show()
-
-plt.plot(range(1, len(train_loss) + 1), train_loss)
-plt.plot(range(1, len(valid_loss) + 1), valid_loss)
-plt.xlabel('epoch')
-plt.ylabel('Loss')
-plt.show()
-'''

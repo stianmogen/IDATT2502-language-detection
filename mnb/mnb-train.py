@@ -48,12 +48,7 @@ fout.close()
 
 min_values = [1, 2, 3]
 max_values = [1, 2, 3]
-analyzers = ["word", "char"]
 
-y_val = le.transform(y_val)
-
-with open("labelencoder", 'wb') as fout:
-    pickle.dump(le, fout)
 
 fout.close()
 
@@ -74,12 +69,17 @@ def run():
         os.makedirs(root_out_path)
 
     for analyzer in analyzers:
+        analyzer_out_path = f"{root_out_path}{analyzer}/"
+
+        if not os.path.exists(analyzer_out_path):
+            os.makedirs(analyzer_out_path)
+
         for max_value in analyzers[analyzer]:
             for min_value in range(1, max_value + 1):
-                type_out_path = f"{max_value}{min_value}/"
+                size_out_path = f"{analyzer_out_path}{max_value}{min_value}/"
 
-                if not os.path.exists(root_out_path + type_out_path):
-                    os.makedirs(root_out_path + type_out_path)
+                if not os.path.exists(size_out_path):
+                    os.makedirs(size_out_path)
 
                 print("\n", max_value, min_value)
 
@@ -88,7 +88,7 @@ def run():
                 x_train_t = cv.fit_transform(x_train)
                 x_val_t = cv.transform(x_val)
 
-                file = open(os.path.join(root_out_path, type_out_path, "vectorizer"), 'wb')
+                file = open(os.path.join(size_out_path, "vectorizer"), 'wb')
                 pickle.dump(cv, file)
                 file.close()
 
@@ -105,7 +105,7 @@ def run():
 
                 print(f"Accuracy is: {ac:.1f}%")
 
-                file = open(os.path.join(root_out_path + type_out_path, "model.sav"), 'wb')
+                file = open(os.path.join(size_out_path, "model.sav"), 'wb')
                 pickle.dump(model, file)
                 file.close()
 
