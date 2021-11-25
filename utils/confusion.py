@@ -1,3 +1,6 @@
+"""
+Determines the bigges variations in prediction for a given model
+"""
 def max_deviation(matrix, limit):
     max_indicies = []
     for i in range(len(matrix)):

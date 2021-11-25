@@ -2,7 +2,9 @@ import torch
 
 from utils.batch_generator import pool_generator
 
-
+"""
+Checks the accuracy of a model without optimizing parameters
+"""
 def validate(model, criterion, data, batch_size, token_size, device):
     model.eval()
 

@@ -11,6 +11,7 @@ from utils.Dataloader import Dataloader
 from utils.confusion import max_deviation
 from utils.model_validator import validate
 
+# Check if cuda is available to run the model
 device = ""
 if torch.cuda.is_available():
     torch.cuda.empty_cache()
@@ -20,26 +21,37 @@ else:
 
 print(device)
 
+# Fetches the necessary dictionaries
 char_dictionary, lang_dictionary = load_dictionary("out/")
 
+# Fetches testing data from dataset folder with the dataloader class
 INPUT_DIR = "../input/dataset"
 dataloader = Dataloader(INPUT_DIR)
+# Use the get_dataframes to get the dataframes for testing
 _, _, _, _, x_test, y_test = dataloader.get_dataframes()
 
+# Set up test dataset using the dictionaries
 x_test_idx = [np.array([char_dictionary.indicies[c] for c in line if c in char_dictionary.indicies]) for line in
               x_test["sentence"]]
 y_test_idx = np.array([lang_dictionary.indicies[lang] for lang in y_test["language"]])
 
+# Loss function
 criterion = torch.nn.CrossEntropyLoss(reduction='sum')
 
 test_data = [(x, y) for x, y in zip(x_test_idx, y_test_idx)]
 
 
 def eval_model(model, criterion, test_data, device, batch_size=64, token_size=1200):
+    """Uses the model_validator class to checks the accuracy of a model"""
     return validate(model, criterion, test_data, batch_size, token_size, device)
 
 
 def eval_nynorsk_bokmaal(model, criterion, test_data, device, batch_size=64, token_size=1200):
+    """This method is to evalulate how well a model can diffirenciate between Bokmål and Nynorsk
+        The method prints both accuracy and loss, aswell as plots two graph.
+        One graph being a confucion matrix,
+        and the other being a normal graph showing us the accuracy over the length of the input.
+    """
     norsk_index = [lang_dictionary.indicies["nno"], lang_dictionary.indicies["nob"]]
     norsk = list(filter(lambda s: s[1] in norsk_index, test_data))
     acc, loss, y_pred, y_actual = validate(model, criterion, norsk, batch_size, token_size, device)
@@ -97,6 +109,7 @@ def print_confusion_matrix(y_pred, y_actual, labels, figsize=(12, 9), name="conf
 
 
 def print_acc_by_seq_len(model, criterion, test_data, device, name="len_test_acc_rnn.png", batch_size=64):
+    """print_acc_by_seq_len prints a graph that show the accuracy of the model over the length of the input."""
     list_y = []
     list_x = []
 
@@ -112,11 +125,12 @@ def print_acc_by_seq_len(model, criterion, test_data, device, name="len_test_acc
     plt.savefig(f"out/{name}")
     plt.show()
 
-
+# Model specific parameters, and various hidden size for testing it's impact difference
 hidden_sizes = [128, 256, 512]
 model_types = ["lstm", "gru"]
 bidirectional_types = {"bidirectional": True, "unidirectional": False}
 
+# Input parameters for the model
 ntokens = len(char_dictionary)
 input_size = ntokens
 embedding_size = 64

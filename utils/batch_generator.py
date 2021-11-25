@@ -2,7 +2,7 @@ import random
 
 
 def batch_generator(data, batch_size, token_size):
-    "Yield elements from data in chunks with a maximum of batch_size sequences"
+    """Yield elements from data in chunks with a maximum of batch_size sequences"""
     minibatch, sequences_count = [], 0
     for ex in data:
         seq_len = len(ex[0])
@@ -21,7 +21,7 @@ def batch_generator(data, batch_size, token_size):
 
 
 def pool_generator(data, batch_size, token_size, shuffle=False):
-    "Divides into buckets of 100 * batchsize -> sorts within each bucket -> sends batches of size batchsize"
+    """Divides into buckets of 100 * batchsize -> sorts within each bucket -> sends batches of size batchsize"""
     for p in batch_generator(data, batch_size * 100, token_size * 100):
         p_batch = batch_generator(sorted(p, key=lambda t: len(t[0]), reverse=True), batch_size, token_size)
         p_list = list(p_batch)

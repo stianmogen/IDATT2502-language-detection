@@ -6,8 +6,10 @@ from sklearn.metrics import accuracy_score
 
 from utils.Dataloader import Dataloader
 
+# Uses dataloader to read the training and validation data
 INPUT_DIR = "../input/dataset"
 dataloader = Dataloader(INPUT_DIR)
+# Uses the get_dataframes() method in dataloader to fetch the relevant dataframes for testing
 _, _, _, _, x_test, y_test = dataloader.get_dataframes()
 
 
