@@ -48,7 +48,6 @@ if not os.path.exists(root_out_path):
 char_dictionary, language_dictionary = write_dictionary(root_out_path, x_train["sentence"], y_train["language"])
 
 pad_index = 0
-unk_index = 1
 
 x_train_idx = [np.array([char_dictionary.indicies[c] for c in line]) for line in x_train["sentence"]]
 y_train_idx = np.array([language_dictionary.indicies[lang] for lang in y_train["language"]])
@@ -59,7 +58,6 @@ y_val_idx = np.array([language_dictionary.indicies[lang] for lang in y_val["lang
 
 train_data = [(x, y) for x, y in zip(x_train_idx, y_train_idx)]
 val_data = [(x, y) for x, y in zip(x_val_idx, y_val_idx)]
-
 
 criterion = torch.nn.CrossEntropyLoss(reduction='sum')
 
@@ -105,15 +103,12 @@ batch_size = 64
 token_size = 1200
 epochs = 15
 
-
 hidden_sizes = [128, 256, 512]
 model_types = ["lstm", "gru"]
-bidirectional_types = {"bidirectional": False, "unidirectional": True}
-
+bidirectional_types = {"bidirectional": True, "unidirectional": False}
 
 
 def run():
-
     for bidirectional_type in bidirectional_types:
         bi_type_path = create_dir(root_out_path, bidirectional_type)
 
@@ -157,7 +152,7 @@ def run():
                     valid_accuracy.append(acc)
                     valid_loss.append(loss)
                     print(f'| epoch {epoch:03d} | valid accuracy={acc:.1f}% | valid loss={loss}')
-                    time.sleep(10) # Cooling down gpu
+                    time.sleep(2)  # Cooling down gpu
 
                 print(model)
                 for name, param in model.named_parameters():
