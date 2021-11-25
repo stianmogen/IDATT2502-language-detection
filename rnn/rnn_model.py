@@ -1,6 +1,6 @@
 import torch.nn
 
-"""DNN Model
+"""RNN Model
 Includes Python comments with the dimension of the input matrix:
 T = Max number of tokens in a sequence
 B = Number of sequences (batch size)
@@ -10,6 +10,7 @@ O = Output size (number of languages)
 """
 
 
+# The RNN model can based on the parameters it receives when creating the model either be a LSTM or GRU type model.
 class CharRNNClassifier(torch.nn.Module):
 
     def __init__(self, input_size, embedding_size, hidden_size, output_size, model, num_layers=1,

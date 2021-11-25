@@ -7,3 +7,5 @@ input/x_test.txt
 input/x_train.txt
 input/y_train.txt
 input/y_test.txt
+
+mnb/out

@@ -3,12 +3,15 @@ import pickle
 
 from utils.Dataloader import Dataloader
 
-
+##
+# Dictinoary class - the dictionary for the RNN models. Holds the language and char vectors for the dataset.
+# #
 class Dictionary(object):
     def __init__(self):
         self.indicies = {}
         self.tokens = []
 
+    # Checks whether the token is already added or not.
     def new_token(self, token):
         # Adds the token to the list, if not already added
         # The index is set to the length of the token array - 1
@@ -20,7 +23,7 @@ class Dictionary(object):
     def __len__(self):
         return len(self.tokens)
 
-
+# Create new dictionary and adds tokens and language
 def create_dictionary(x, y):
 
     char_dictionary = Dictionary()
@@ -43,6 +46,7 @@ def create_dictionary(x, y):
     return char_dictionary, language_dictionary
 
 
+# Takes the language and char dictionaries created in memory and writes them to a .txt file for use in inference later
 def write_dictionary(path, x, y):
     if not os.path.exists(path):
         os.makedirs(path)
@@ -55,7 +59,7 @@ def write_dictionary(path, x, y):
 
     return char_dictionary, language_dictionary
 
-
+# Loads the two dictionary for when a using a model for inference
 def load_dictionary(path):
     with open(f'{path}char_dic.txt', 'rb') as f1:
         char_dic = pickle.load(f1)
