@@ -21,6 +21,7 @@ The the specific model type
 
 You can write a sentence among the 235 included languages
 The top 3 predictions will be given as output. Here, English (eng) is the top prediction!
+
 ![picture3](docs/images-readme/p3.png)
 
 Luckily, this specific model is better at Spanish than us. 
