@@ -53,6 +53,7 @@ The project contains the following directories:
 - test-client
 - utils
 - input
+- docs
 
 ### MNB (Multinomial Naive Bayes) 
 
@@ -87,3 +88,7 @@ The utils directory contains necessary classes for the models in the project.
 The input directory contains the original dataset with the corresponding urls and labels. The dataset is the "WiLI-2018, and was provided [here](https://zenodo.org/record/841984#.YZ-Hvr3MIq0).
 
 The dataset used by the models are saved in the "dataset" directory. The dataset split into the preffered training, validation and test ratio is saved in files ending with "split.txt".
+
+### Docs
+
+Here you can find the project report, or the results from each epoch of each model.
