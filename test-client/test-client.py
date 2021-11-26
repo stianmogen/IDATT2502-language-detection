@@ -128,11 +128,11 @@ while not finished:
         elif option_choice == "6":
             model = rnn_model("gru", 512, True)
         elif option_choice == "7":
-            model = rnn_model("lstm", 128, True)
+            model = rnn_model("lstm", 128, False)
         elif option_choice == "8":
-            model = rnn_model("lstm", 256, True)
+            model = rnn_model("lstm", 256, False)
         elif option_choice == "9":
-            model = rnn_model("lstm", 512, True)
+            model = rnn_model("lstm", 512, False)
         elif option_choice == "10":
             model = rnn_model("gru", 128, False)
         elif option_choice == "11":
@@ -142,11 +142,11 @@ while not finished:
         else:
             continue
         sentence = ""
-        while sentence != "m":
-            sentence = input("Enter a sentence\n")
+        while sentence != "e":
+            sentence = input("Enter a sentence ('q' to quit, 'e' to exit)\n")
             if sentence == "q":
                 finished = True
-            elif sentence == "m":
+            elif sentence == "e":
                 break
             else:
                 rnn_predict(sentence, model)
@@ -172,11 +172,11 @@ while not finished:
         else:
             continue
         sentence = ""
-        while sentence != "m":
-            sentence = input("Enter a sentence\n")
+        while sentence != "e":
+            sentence = input("Enter a sentence ('q' to quit, 'e' to exit)\n")
             if sentence == "q":
                 finished = True
-            elif sentence == "m":
+            elif sentence == "e":
                 break
             else:
                 mnb_predict(sentence, cv, le, model)
