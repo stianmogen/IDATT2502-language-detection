@@ -1,0 +1,766 @@
+Best results
+Bi_lstm_128
+Val_acc = 94,3 % val_loss = 0.2211 epoch = 15
+Bi_lstm_256
+Val_acc = 95,5% val_loss = 0.1865 epoch = 13
+Bi_lstm_512
+Val_acc = 95,9% val_loss = 0.1869 epoch = 9
+Bi_gru_128
+Val_acc = 93,9% val_loss = 0.2385 epoch = 15
+Bi_gru_256
+Val_acc = 95,0% val_acc = 0.2053 epoch = 15
+Bi_gru_512
+Val_acc = 95,7% val_loss  = 0.2092 epoch = 9
+
+Uni_lstm_128
+Val_acc = 93,0 % val_loss = 0.2711 epoch = 15
+Uni_lstm_256
+Val_acc = 94,4% val_loss = 0.2115 epoch = 15
+Uni_lstm_512
+Val_acc = 95,5% val_loss = 0.1855 epoch = 12
+Uni_gru_128
+Val_acc = 92,3% val_loss = 0.2976 epoch = 15
+Uni_gru_256
+Val_acc = 94,3% val_acc = 0.2267 epoch = 13
+Uni_gru_512
+Val_acc = 95,3% val_loss  = 0.2025 epoch = 12
+
+Bidirectional
+Lstm
+128
+Learning rate: [0.001]
+| epoch 001 | train accuracy=71.5% | train loss=1.3429532283975723 (210s)
+| epoch 001 | valid accuracy=89.1% | valid loss=0.4399504314179116
+Learning rate: [0.001]
+| epoch 002 | train accuracy=90.3% | train loss=0.37591430330783765 (440s)
+| epoch 002 | valid accuracy=91.7% | valid loss=0.3217903547388442
+Learning rate: [0.001]
+| epoch 003 | train accuracy=92.5% | train loss=0.2897985290453789 (671s)
+| epoch 003 | valid accuracy=92.6% | valid loss=0.285243248117731
+Learning rate: [0.001]
+| epoch 004 | train accuracy=93.6% | train loss=0.244193906055803 (902s)
+| epoch 004 | valid accuracy=93.1% | valid loss=0.2638837239894461
+Learning rate: [0.001]
+| epoch 005 | train accuracy=94.3% | train loss=0.21429577061533928 (1132s)
+| epoch 005 | valid accuracy=93.5% | valid loss=0.254280846118927
+Learning rate: [0.0001]
+| epoch 006 | train accuracy=95.7% | train loss=0.16474784784462856 (1362s)
+| epoch 006 | valid accuracy=94.1% | valid loss=0.23038092505678218
+Learning rate: [0.0001]
+| epoch 007 | train accuracy=96.0% | train loss=0.15352234560275013 (1592s)
+| epoch 007 | valid accuracy=94.1% | valid loss=0.22754619034046822
+Learning rate: [0.0001]
+| epoch 008 | train accuracy=96.2% | train loss=0.14713049804375686 (1822s)
+| epoch 008 | valid accuracy=94.3% | valid loss=0.225772189837821
+Learning rate: [0.0001]
+| epoch 009 | train accuracy=96.3% | train loss=0.14194579144678218 (2051s)
+| epoch 009 | valid accuracy=94.2% | valid loss=0.22457970742976413
+Learning rate: [0.0001]
+| epoch 010 | train accuracy=96.5% | train loss=0.1374979445740105 (2282s)
+| epoch 010 | valid accuracy=94.2% | valid loss=0.2235981282021137
+Learning rate: [1e-05]
+| epoch 011 | train accuracy=96.7% | train loss=0.13146279412876577 (2511s)
+| epoch 011 | valid accuracy=94.3% | valid loss=0.22196231287844637
+Learning rate: [1e-05]
+| epoch 012 | train accuracy=96.7% | train loss=0.13014245186722342 (2742s)
+| epoch 012 | valid accuracy=94.3% | valid loss=0.22159146488727408
+Learning rate: [1e-05]
+| epoch 013 | train accuracy=96.7% | train loss=0.12939302469520492 (2972s)
+| epoch 013 | valid accuracy=94.3% | valid loss=0.22140926265716554
+Learning rate: [1e-05]
+| epoch 014 | train accuracy=96.8% | train loss=0.12879617991278622 (3202s)
+| epoch 014 | valid accuracy=94.3% | valid loss=0.2212699955067736
+Learning rate: [1e-05]
+| epoch 015 | train accuracy=96.8% | train loss=0.1282469877715599 (3431s)
+| epoch 015 | valid accuracy=94.3% | valid loss=0.22114388408305796
+CharRNNClassifier(
+  (embed): Embedding(11798, 64, padding_idx=0)
+  (rnn): LSTM(64, 128, bidirectional=True)
+  (h2o): Linear(in_features=256, out_features=235, bias=True)
+)
+embed.weight         755072 [11798, 64]
+rnn.weight_ih_l0     32768 [512, 64]
+rnn.weight_hh_l0     65536 [512, 128]
+rnn.bias_ih_l0       512 [512]
+rnn.bias_hh_l0       512 [512]
+rnn.weight_ih_l0_reverse 32768 [512, 64]
+rnn.weight_hh_l0_reverse 65536 [512, 128]
+rnn.bias_ih_l0_reverse 512 [512]
+rnn.bias_hh_l0_reverse 512 [512]
+h2o.weight           60160 [235, 256]
+h2o.bias             235 [235]
+TOTAL                1014123
+256
+Learning rate: [0.001]
+| epoch 001 | train accuracy=76.9% | train loss=1.0331206818134226 (233s)
+| epoch 001 | valid accuracy=91.2% | valid loss=0.34551718488652655
+Learning rate: [0.001]
+| epoch 002 | train accuracy=92.6% | train loss=0.28977140760294934 (483s)
+| epoch 002 | valid accuracy=93.1% | valid loss=0.2649309645561462
+Learning rate: [0.001]
+| epoch 003 | train accuracy=94.4% | train loss=0.2159261842617329 (734s)
+| epoch 003 | valid accuracy=94.1% | valid loss=0.230597959472778
+Learning rate: [0.001]
+| epoch 004 | train accuracy=95.3% | train loss=0.17556587258607467 (985s)
+| epoch 004 | valid accuracy=94.5% | valid loss=0.22010658936804914
+Learning rate: [0.001]
+| epoch 005 | train accuracy=96.1% | train loss=0.14544884265487656 (1236s)
+| epoch 005 | valid accuracy=94.6% | valid loss=0.210650683746693
+Learning rate: [0.0001]
+| epoch 006 | train accuracy=97.4% | train loss=0.09741757208190145 (1487s)
+| epoch 006 | valid accuracy=95.3% | valid loss=0.19082320556551852
+Learning rate: [0.0001]
+| epoch 007 | train accuracy=97.8% | train loss=0.08514952798681136 (1739s)
+| epoch 007 | valid accuracy=95.4% | valid loss=0.18897219484093342
+Learning rate: [0.0001]
+| epoch 008 | train accuracy=98.0% | train loss=0.07798376125501508 (1990s)
+| epoch 008 | valid accuracy=95.4% | valid loss=0.1890130120002209
+Learning rate: [0.0001]
+| epoch 009 | train accuracy=98.1% | train loss=0.07234248300538736 (2241s)
+| epoch 009 | valid accuracy=95.4% | valid loss=0.18873526428481366
+Learning rate: [0.0001]
+| epoch 010 | train accuracy=98.3% | train loss=0.06733422639158534 (2492s)
+| epoch 010 | valid accuracy=95.4% | valid loss=0.18892269259437602
+Learning rate: [1e-05]
+| epoch 011 | train accuracy=98.5% | train loss=0.06214024937454056 (2744s)
+| epoch 011 | valid accuracy=95.5% | valid loss=0.18685221360814064
+Learning rate: [1e-05]
+| epoch 012 | train accuracy=98.5% | train loss=0.060668075540677664 (2995s)
+| epoch 012 | valid accuracy=95.5% | valid loss=0.1865920554149024
+Learning rate: [1e-05]
+| epoch 013 | train accuracy=98.5% | train loss=0.059896391048601415 (3247s)
+| epoch 013 | valid accuracy=95.5% | valid loss=0.18650555641378494
+Learning rate: [1e-05]
+| epoch 014 | train accuracy=98.5% | train loss=0.05929055427463646 (3499s)
+| epoch 014 | valid accuracy=95.5% | valid loss=0.1865439876305296
+Learning rate: [1e-05]
+| epoch 015 | train accuracy=98.6% | train loss=0.05872785725938949 (3751s)
+| epoch 015 | valid accuracy=95.5% | valid loss=0.18658646293364942
+CharRNNClassifier(
+  (embed): Embedding(11798, 64, padding_idx=0)
+  (rnn): LSTM(64, 256, bidirectional=True)
+  (h2o): Linear(in_features=512, out_features=235, bias=True)
+)
+embed.weight         755072 [11798, 64]
+rnn.weight_ih_l0     65536 [1024, 64]
+rnn.weight_hh_l0     262144 [1024, 256]
+rnn.bias_ih_l0       1024 [1024]
+rnn.bias_hh_l0       1024 [1024]
+rnn.weight_ih_l0_reverse 65536 [1024, 64]
+rnn.weight_hh_l0_reverse 262144 [1024, 256]
+rnn.bias_ih_l0_reverse 1024 [1024]
+rnn.bias_hh_l0_reverse 1024 [1024]
+h2o.weight           120320 [235, 512]
+h2o.bias             235 [235]
+TOTAL                1535083
+512
+Learning rate: [0.001]
+| epoch 001 | train accuracy=79.9% | train loss=0.8702664282816521 (497s)
+| epoch 001 | valid accuracy=92.7% | valid loss=0.288452446957852
+Learning rate: [0.001]
+| epoch 002 | train accuracy=93.8% | train loss=0.24221023665431965 (1022s)
+| epoch 002 | valid accuracy=94.1% | valid loss=0.22835276635910604
+Learning rate: [0.001]
+| epoch 003 | train accuracy=95.5% | train loss=0.17081416741199792 (1547s)
+| epoch 003 | valid accuracy=94.7% | valid loss=0.20994961685956792
+Learning rate: [0.001]
+| epoch 004 | train accuracy=96.5% | train loss=0.12645140760053108 (2071s)
+| epoch 004 | valid accuracy=95.0% | valid loss=0.20600392101927006
+Learning rate: [0.001]
+| epoch 005 | train accuracy=97.4% | train loss=0.09353272105837637 (2597s)
+| epoch 005 | valid accuracy=95.1% | valid loss=0.20883142917587402
+Learning rate: [0.0001]
+| epoch 006 | train accuracy=98.7% | train loss=0.049663523807955724 (3122s)
+| epoch 006 | valid accuracy=95.7% | valid loss=0.18416538261859974
+Learning rate: [0.0001]
+| epoch 007 | train accuracy=99.0% | train loss=0.03794850613902561 (3647s)
+| epoch 007 | valid accuracy=95.8% | valid loss=0.18377726362709035
+Learning rate: [0.0001]
+| epoch 008 | train accuracy=99.3% | train loss=0.03121835694071698 (4173s)
+| epoch 008 | valid accuracy=95.8% | valid loss=0.18522541368546638
+Learning rate: [0.0001]
+| epoch 009 | train accuracy=99.4% | train loss=0.02611981925307253 (4698s)
+| epoch 009 | valid accuracy=95.9% | valid loss=0.18689658850193658
+Learning rate: [0.0001]
+| epoch 010 | train accuracy=99.5% | train loss=0.021984013902933704 (5223s)
+| epoch 010 | valid accuracy=95.8% | valid loss=0.18898865049411642
+Learning rate: [1e-05]
+| epoch 011 | train accuracy=99.6% | train loss=0.018235382507347124 (5749s)
+| epoch 011 | valid accuracy=95.9% | valid loss=0.18750244768915025
+Learning rate: [1e-05]
+| epoch 012 | train accuracy=99.6% | train loss=0.017332122486192446 (6274s)
+| epoch 012 | valid accuracy=95.9% | valid loss=0.18741008145409696
+Learning rate: [1e-05]
+| epoch 013 | train accuracy=99.6% | train loss=0.016767874101277173 (6800s)
+| epoch 013 | valid accuracy=95.9% | valid loss=0.18751921310957442
+Learning rate: [1e-05]
+| epoch 014 | train accuracy=99.7% | train loss=0.01631016811961184 (7325s)
+| epoch 014 | valid accuracy=95.9% | valid loss=0.18773838733834156
+Learning rate: [1e-05]
+| epoch 015 | train accuracy=99.7% | train loss=0.01589434990459964 (7851s)
+| epoch 015 | valid accuracy=95.9% | valid loss=0.18795582776928835
+CharRNNClassifier(
+  (embed): Embedding(11798, 64, padding_idx=0)
+  (rnn): LSTM(64, 512, bidirectional=True)
+  (h2o): Linear(in_features=1024, out_features=235, bias=True)
+)
+embed.weight         755072 [11798, 64]
+rnn.weight_ih_l0     131072 [2048, 64]
+rnn.weight_hh_l0     1048576 [2048, 512]
+rnn.bias_ih_l0       2048 [2048]
+rnn.bias_hh_l0       2048 [2048]
+rnn.weight_ih_l0_reverse 131072 [2048, 64]
+rnn.weight_hh_l0_reverse 1048576 [2048, 512]
+rnn.bias_ih_l0_reverse 2048 [2048]
+rnn.bias_hh_l0_reverse 2048 [2048]
+h2o.weight           240640 [235, 1024]
+h2o.bias             235 [235]
+TOTAL                3363435
+Gru
+128
+Learning rate: [0.001]
+| epoch 001 | train accuracy=75.3% | train loss=1.1298163689045195 (212s)
+| epoch 001 | valid accuracy=88.1% | valid loss=0.4526683023331013
+Learning rate: [0.001]
+| epoch 002 | train accuracy=90.2% | train loss=0.3782442265406568 (441s)
+| epoch 002 | valid accuracy=91.1% | valid loss=0.33969384394300745
+Learning rate: [0.001]
+| epoch 003 | train accuracy=92.3% | train loss=0.29786915889762816 (670s)
+| epoch 003 | valid accuracy=92.4% | valid loss=0.29756701945243996
+Learning rate: [0.001]
+| epoch 004 | train accuracy=93.3% | train loss=0.2550330980318658 (899s)
+| epoch 004 | valid accuracy=92.5% | valid loss=0.2882524938431192
+Learning rate: [0.001]
+| epoch 005 | train accuracy=93.9% | train loss=0.2293902270533937 (1127s)
+| epoch 005 | valid accuracy=93.1% | valid loss=0.273714851879059
+Learning rate: [0.0001]
+| epoch 006 | train accuracy=95.4% | train loss=0.17436709369528802 (1355s)
+| epoch 006 | valid accuracy=93.7% | valid loss=0.24765124660349908
+Learning rate: [0.0001]
+| epoch 007 | train accuracy=95.6% | train loss=0.1650805956867147 (1583s)
+| epoch 007 | valid accuracy=93.7% | valid loss=0.24482234383643942
+Learning rate: [0.0001]
+| epoch 008 | train accuracy=95.8% | train loss=0.15985137647406217 (1811s)
+| epoch 008 | valid accuracy=93.8% | valid loss=0.24309981603318073
+Learning rate: [0.0001]
+| epoch 009 | train accuracy=95.9% | train loss=0.15564776453661158 (2040s)
+| epoch 009 | valid accuracy=93.8% | valid loss=0.2417284590132693
+Learning rate: [0.0001]
+| epoch 010 | train accuracy=96.0% | train loss=0.1519071675040462 (2268s)
+| epoch 010 | valid accuracy=93.8% | valid loss=0.24120443272590636
+Learning rate: [1e-05]
+| epoch 011 | train accuracy=96.2% | train loss=0.14582850418065457 (2497s)
+| epoch 011 | valid accuracy=93.9% | valid loss=0.23917381562577916
+Learning rate: [1e-05]
+| epoch 012 | train accuracy=96.3% | train loss=0.14463386184183208 (2726s)
+| epoch 012 | valid accuracy=93.9% | valid loss=0.23886980960216928
+Learning rate: [1e-05]
+| epoch 013 | train accuracy=96.3% | train loss=0.14407361579607142 (2954s)
+| epoch 013 | valid accuracy=93.9% | valid loss=0.23869946826265212
+Learning rate: [1e-05]
+| epoch 014 | train accuracy=96.3% | train loss=0.14362806789442262 (3183s)
+| epoch 014 | valid accuracy=93.9% | valid loss=0.23861391479918298
+Learning rate: [1e-05]
+| epoch 015 | train accuracy=96.3% | train loss=0.1432288705087564 (3413s)
+| epoch 015 | valid accuracy=93.9% | valid loss=0.23848033262820953
+CharRNNClassifier(
+  (embed): Embedding(11798, 64, padding_idx=0)
+  (rnn): GRU(64, 128, bidirectional=True)
+  (h2o): Linear(in_features=256, out_features=235, bias=True)
+)
+embed.weight         755072 [11798, 64]
+rnn.weight_ih_l0     24576 [384, 64]
+rnn.weight_hh_l0     49152 [384, 128]
+rnn.bias_ih_l0       384 [384]
+rnn.bias_hh_l0       384 [384]
+rnn.weight_ih_l0_reverse 24576 [384, 64]
+rnn.weight_hh_l0_reverse 49152 [384, 128]
+rnn.bias_ih_l0_reverse 384 [384]
+rnn.bias_hh_l0_reverse 384 [384]
+h2o.weight           60160 [235, 256]
+h2o.bias             235 [235]
+TOTAL                964459
+256
+Training cross-validation model for 15 epochs
+Learning rate: [0.001]
+| epoch 001 | train accuracy=80.1% | train loss=0.8700619939514931 (218s)
+| epoch 001 | valid accuracy=91.5% | valid loss=0.34314136795287437
+Learning rate: [0.001]
+| epoch 002 | train accuracy=92.4% | train loss=0.29577756284716283 (454s)
+| epoch 002 | valid accuracy=92.7% | valid loss=0.2793438742921707
+Learning rate: [0.001]
+| epoch 003 | train accuracy=93.8% | train loss=0.2335666867507265 (690s)
+| epoch 003 | valid accuracy=93.3% | valid loss=0.26188620821973113
+Learning rate: [0.001]
+| epoch 004 | train accuracy=94.7% | train loss=0.1958529977040722 (926s)
+| epoch 004 | valid accuracy=93.7% | valid loss=0.25170991706340873
+Learning rate: [0.001]
+| epoch 005 | train accuracy=95.3% | train loss=0.17175572104783768 (1162s)
+| epoch 005 | valid accuracy=93.9% | valid loss=0.2495344423968741
+Learning rate: [0.0001]
+| epoch 006 | train accuracy=97.0% | train loss=0.11116451430518894 (1398s)
+| epoch 006 | valid accuracy=94.7% | valid loss=0.2128763240372881
+Learning rate: [0.0001]
+| epoch 007 | train accuracy=97.3% | train loss=0.09879633616386575 (1634s)
+| epoch 007 | valid accuracy=94.8% | valid loss=0.2104796639477953
+Learning rate: [0.0001]
+| epoch 008 | train accuracy=97.5% | train loss=0.09146434998466693 (1869s)
+| epoch 008 | valid accuracy=94.9% | valid loss=0.20932302647321782
+Learning rate: [0.0001]
+| epoch 009 | train accuracy=97.7% | train loss=0.08569984656938927 (2101s)
+| epoch 009 | valid accuracy=94.8% | valid loss=0.209181506692095
+Learning rate: [0.0001]
+| epoch 010 | train accuracy=97.8% | train loss=0.08091679405571615 (2333s)
+| epoch 010 | valid accuracy=94.9% | valid loss=0.2087804034390348
+Learning rate: [1e-05]
+| epoch 011 | train accuracy=98.0% | train loss=0.07475596889621637 (2565s)
+| epoch 011 | valid accuracy=95.0% | valid loss=0.20581205424729815
+Learning rate: [1e-05]
+| epoch 012 | train accuracy=98.1% | train loss=0.07318890584080896 (2796s)
+| epoch 012 | valid accuracy=95.0% | valid loss=0.2054272481228443
+Learning rate: [1e-05]
+| epoch 013 | train accuracy=98.1% | train loss=0.07237806417389793 (3028s)
+| epoch 013 | valid accuracy=95.0% | valid loss=0.2053136381354738
+Learning rate: [1e-05]
+| epoch 014 | train accuracy=98.1% | train loss=0.07176409895664596 (3260s)
+| epoch 014 | valid accuracy=95.0% | valid loss=0.20530744114327937
+Learning rate: [1e-05]
+| epoch 015 | train accuracy=98.1% | train loss=0.07121538100962309 (3491s)
+| epoch 015 | valid accuracy=95.0% | valid loss=0.20529142395866679
+CharRNNClassifier(
+  (embed): Embedding(11798, 64, padding_idx=0)
+  (rnn): GRU(64, 256, bidirectional=True)
+  (h2o): Linear(in_features=512, out_features=235, bias=True)
+)
+embed.weight         755072 [11798, 64]
+rnn.weight_ih_l0     49152 [768, 64]
+rnn.weight_hh_l0     196608 [768, 256]
+rnn.bias_ih_l0       768 [768]
+rnn.bias_hh_l0       768 [768]
+rnn.weight_ih_l0_reverse 49152 [768, 64]
+rnn.weight_hh_l0_reverse 196608 [768, 256]
+rnn.bias_ih_l0_reverse 768 [768]
+rnn.bias_hh_l0_reverse 768 [768]
+h2o.weight           120320 [235, 512]
+h2o.bias             235 [235]
+TOTAL                1370219
+512
+Learning rate: [0.001]
+| epoch 001 | train accuracy=82.6% | train loss=0.7512604797038627 (403s)
+| epoch 001 | valid accuracy=92.1% | valid loss=0.3134325793448915
+Learning rate: [0.001]
+| epoch 002 | train accuracy=93.5% | train loss=0.25127275203200095 (829s)
+| epoch 002 | valid accuracy=93.3% | valid loss=0.26228588513110546
+Learning rate: [0.001]
+| epoch 003 | train accuracy=95.0% | train loss=0.1867501950348787 (1254s)
+| epoch 003 | valid accuracy=94.0% | valid loss=0.24415535862902377
+Learning rate: [0.001]
+| epoch 004 | train accuracy=95.9% | train loss=0.1482505520992972 (1680s)
+| epoch 004 | valid accuracy=94.3% | valid loss=0.23573050856843908
+Learning rate: [0.001]
+| epoch 005 | train accuracy=96.7% | train loss=0.11586808613384579 (2105s)
+| epoch 005 | valid accuracy=94.7% | valid loss=0.22948768674471276
+Learning rate: [0.0001]
+| epoch 006 | train accuracy=98.4% | train loss=0.057942931390423176 (2531s)
+| epoch 006 | valid accuracy=95.5% | valid loss=0.20346437174842713
+Learning rate: [0.0001]
+| epoch 007 | train accuracy=98.8% | train loss=0.04498514136584956 (2956s)
+| epoch 007 | valid accuracy=95.6% | valid loss=0.20449883720976242
+Learning rate: [0.0001]
+| epoch 008 | train accuracy=99.0% | train loss=0.037701869836008976 (3382s)
+| epoch 008 | valid accuracy=95.6% | valid loss=0.2066043935135958
+Learning rate: [0.0001]
+| epoch 009 | train accuracy=99.2% | train loss=0.03204308562598283 (3807s)
+| epoch 009 | valid accuracy=95.7% | valid loss=0.20919012502755258
+Learning rate: [0.0001]
+| epoch 010 | train accuracy=99.3% | train loss=0.02732847823902526 (4233s)
+| epoch 010 | valid accuracy=95.7% | valid loss=0.21263751047976473
+Learning rate: [1e-05]
+| epoch 011 | train accuracy=99.4% | train loss=0.023081662526899117 (4658s)
+| epoch 011 | valid accuracy=95.7% | valid loss=0.21076839550188248
+Learning rate: [1e-05]
+| epoch 012 | train accuracy=99.5% | train loss=0.021767175885025126 (5083s)
+| epoch 012 | valid accuracy=95.7% | valid loss=0.21094749659712012
+Learning rate: [1e-05]
+| epoch 013 | train accuracy=99.5% | train loss=0.02110062570408658 (5508s)
+| epoch 013 | valid accuracy=95.7% | valid loss=0.21122091218955974
+Learning rate: [1e-05]
+| epoch 014 | train accuracy=99.5% | train loss=0.0205769755658223 (5933s)
+| epoch 014 | valid accuracy=95.7% | valid loss=0.21158519113444269
+Learning rate: [1e-05]
+| epoch 015 | train accuracy=99.5% | train loss=0.020102550277005922 (6359s)
+| epoch 015 | valid accuracy=95.7% | valid loss=0.21188289923870818
+CharRNNClassifier(
+  (embed): Embedding(11798, 64, padding_idx=0)
+  (rnn): GRU(64, 512, bidirectional=True)
+  (h2o): Linear(in_features=1024, out_features=235, bias=True)
+)
+embed.weight         755072 [11798, 64]
+rnn.weight_ih_l0     98304 [1536, 64]
+rnn.weight_hh_l0     786432 [1536, 512]
+rnn.bias_ih_l0       1536 [1536]
+rnn.bias_hh_l0       1536 [1536]
+rnn.weight_ih_l0_reverse 98304 [1536, 64]
+rnn.weight_hh_l0_reverse 786432 [1536, 512]
+rnn.bias_ih_l0_reverse 1536 [1536]
+rnn.bias_hh_l0_reverse 1536 [1536]
+h2o.weight           240640 [235, 1024]
+h2o.bias             235 [235]
+TOTAL                2771563
+Unidirectional
+Lstm
+128
+Learning rate: [0.001]
+| epoch 001 | train accuracy=61.5% | train loss=1.8615671453577407 (116s)
+| epoch 001 | valid accuracy=82.5% | valid loss=0.6883693373659824
+Learning rate: [0.001]
+| epoch 002 | train accuracy=86.2% | train loss=0.5410912188951005 (248s)
+| epoch 002 | valid accuracy=88.5% | valid loss=0.4458988196393277
+Learning rate: [0.001]
+| epoch 003 | train accuracy=89.7% | train loss=0.3963575592928744 (380s)
+| epoch 003 | valid accuracy=90.5% | valid loss=0.3662917900897087
+Learning rate: [0.001]
+| epoch 004 | train accuracy=91.3% | train loss=0.3344662070363126 (511s)
+| epoch 004 | valid accuracy=91.2% | valid loss=0.3353307032179325
+Learning rate: [0.001]
+| epoch 005 | train accuracy=92.3% | train loss=0.2968310956485728 (643s)
+| epoch 005 | valid accuracy=91.7% | valid loss=0.3164507314905207
+Learning rate: [0.0001]
+| epoch 006 | train accuracy=93.7% | train loss=0.24313954658489279 (775s)
+| epoch 006 | valid accuracy=92.6% | valid loss=0.2836386364470137
+Learning rate: [0.0001]
+| epoch 007 | train accuracy=94.0% | train loss=0.23247657951776018 (907s)
+| epoch 007 | valid accuracy=92.7% | valid loss=0.28076747729423196
+Learning rate: [0.0001]
+| epoch 008 | train accuracy=94.2% | train loss=0.22641010786085686 (1038s)
+| epoch 008 | valid accuracy=92.8% | valid loss=0.27809514509363376
+Learning rate: [0.0001]
+| epoch 009 | train accuracy=94.3% | train loss=0.22150921061856949 (1170s)
+| epoch 009 | valid accuracy=92.7% | valid loss=0.2761908613418011
+Learning rate: [0.0001]
+| epoch 010 | train accuracy=94.4% | train loss=0.21737275945347675 (1300s)
+| epoch 010 | valid accuracy=92.8% | valid loss=0.2746418490004032
+Learning rate: [1e-05]
+| epoch 011 | train accuracy=94.6% | train loss=0.21124457481059622 (1432s)
+| epoch 011 | valid accuracy=93.0% | valid loss=0.2719914838202456
+Learning rate: [1e-05]
+| epoch 012 | train accuracy=94.7% | train loss=0.20989666502114307 (1563s)
+| epoch 012 | valid accuracy=93.0% | valid loss=0.2716047627925873
+Learning rate: [1e-05]
+| epoch 013 | train accuracy=94.7% | train loss=0.20920694890428096 (1695s)
+| epoch 013 | valid accuracy=93.0% | valid loss=0.27140875125438607
+Learning rate: [1e-05]
+| epoch 014 | train accuracy=94.7% | train loss=0.20866033792178681 (1827s)
+| epoch 014 | valid accuracy=93.0% | valid loss=0.27125860851369005
+Learning rate: [1e-05]
+| epoch 015 | train accuracy=94.7% | train loss=0.20816793874381703 (1959s)
+| epoch 015 | valid accuracy=93.0% | valid loss=0.27112454705542705
+CharRNNClassifier(
+  (embed): Embedding(11798, 64, padding_idx=0)
+  (rnn): LSTM(64, 128)
+  (h2o): Linear(in_features=128, out_features=235, bias=True)
+)
+embed.weight         755072 [11798, 64]
+rnn.weight_ih_l0     32768 [512, 64]
+rnn.weight_hh_l0     65536 [512, 128]
+rnn.bias_ih_l0       512 [512]
+rnn.bias_hh_l0       512 [512]
+h2o.weight           30080 [235, 128]
+h2o.bias             235 [235]
+TOTAL                884715
+256
+Learning rate: [0.001]
+| epoch 001 | train accuracy=68.3% | train loss=1.4506541857059965 (136s)
+| epoch 001 | valid accuracy=88.1% | valid loss=0.46154713117315416
+Learning rate: [0.001]
+| epoch 002 | train accuracy=90.3% | train loss=0.3786247432307994 (288s)
+| epoch 002 | valid accuracy=91.6% | valid loss=0.32866640243124456
+Learning rate: [0.001]
+| epoch 003 | train accuracy=92.5% | train loss=0.28796443250965564 (440s)
+| epoch 003 | valid accuracy=92.7% | valid loss=0.28110372233898084
+Learning rate: [0.001]
+| epoch 004 | train accuracy=93.6% | train loss=0.24232115941352034 (591s)
+| epoch 004 | valid accuracy=93.2% | valid loss=0.26226081560520415
+Learning rate: [0.001]
+| epoch 005 | train accuracy=94.4% | train loss=0.21163678138243391 (744s)
+| epoch 005 | valid accuracy=93.6% | valid loss=0.2438751384374943
+Learning rate: [0.0001]
+| epoch 006 | train accuracy=95.8% | train loss=0.16078660883025286 (896s)
+| epoch 006 | valid accuracy=94.2% | valid loss=0.21921285567765542
+Learning rate: [0.0001]
+| epoch 007 | train accuracy=96.1% | train loss=0.14827882602018244 (1048s)
+| epoch 007 | valid accuracy=94.3% | valid loss=0.2170493111978186
+Learning rate: [0.0001]
+| epoch 008 | train accuracy=96.4% | train loss=0.1407252540044645 (1200s)
+| epoch 008 | valid accuracy=94.4% | valid loss=0.21562258961226077
+Learning rate: [0.0001]
+| epoch 009 | train accuracy=96.5% | train loss=0.1347167868523046 (1352s)
+| epoch 009 | valid accuracy=94.3% | valid loss=0.21440552619923936
+Learning rate: [0.0001]
+| epoch 010 | train accuracy=96.7% | train loss=0.1293304652901406 (1504s)
+| epoch 010 | valid accuracy=94.3% | valid loss=0.21459453120383812
+Learning rate: [1e-05]
+| epoch 011 | train accuracy=96.9% | train loss=0.12344419940216268 (1656s)
+| epoch 011 | valid accuracy=94.4% | valid loss=0.21223593184795786
+Learning rate: [1e-05]
+| epoch 012 | train accuracy=96.9% | train loss=0.12169061708692065 (1808s)
+| epoch 012 | valid accuracy=94.4% | valid loss=0.2118848924243704
+Learning rate: [1e-05]
+| epoch 013 | train accuracy=96.9% | train loss=0.12079752182595907 (1960s)
+| epoch 013 | valid accuracy=94.4% | valid loss=0.21168054813780682
+Learning rate: [1e-05]
+| epoch 014 | train accuracy=97.0% | train loss=0.12009189051231171 (2112s)
+| epoch 014 | valid accuracy=94.4% | valid loss=0.21159540147730646
+Learning rate: [1e-05]
+| epoch 015 | train accuracy=97.0% | train loss=0.11946405168571213 (2263s)
+| epoch 015 | valid accuracy=94.4% | valid loss=0.21152347125651988
+CharRNNClassifier(
+  (embed): Embedding(11798, 64, padding_idx=0)
+  (rnn): LSTM(64, 256)
+  (h2o): Linear(in_features=256, out_features=235, bias=True)
+)
+embed.weight         755072 [11798, 64]
+rnn.weight_ih_l0     65536 [1024, 64]
+rnn.weight_hh_l0     262144 [1024, 256]
+rnn.bias_ih_l0       1024 [1024]
+rnn.bias_hh_l0       1024 [1024]
+h2o.weight           60160 [235, 256]
+h2o.bias             235 [235]
+TOTAL                1145195
+512
+Learning rate: [0.001]
+| epoch 001 | train accuracy=74.0% | train loss=1.1409889431202664 (277s)
+| epoch 001 | valid accuracy=91.0% | valid loss=0.350102927126783
+Learning rate: [0.001]
+| epoch 002 | train accuracy=92.4% | train loss=0.2956172701069649 (576s)
+| epoch 002 | valid accuracy=93.2% | valid loss=0.2659658013709048
+Learning rate: [0.001]
+| epoch 003 | train accuracy=94.3% | train loss=0.2163511222359982 (875s)
+| epoch 003 | valid accuracy=94.0% | valid loss=0.2349719531789739
+Learning rate: [0.001]
+| epoch 004 | train accuracy=95.4% | train loss=0.1726570627048136 (1174s)
+| epoch 004 | valid accuracy=94.4% | valid loss=0.21970382697024243
+Learning rate: [0.001]
+| epoch 005 | train accuracy=96.2% | train loss=0.1408144965715548 (1473s)
+| epoch 005 | valid accuracy=94.7% | valid loss=0.20913904235464462
+Learning rate: [0.0001]
+| epoch 006 | train accuracy=97.6% | train loss=0.09182403550762683 (1772s)
+| epoch 006 | valid accuracy=95.3% | valid loss=0.18739330452807407
+Learning rate: [0.0001]
+| epoch 007 | train accuracy=98.0% | train loss=0.07773093537868872 (2072s)
+| epoch 007 | valid accuracy=95.3% | valid loss=0.1861236079855168
+Learning rate: [0.0001]
+| epoch 008 | train accuracy=98.2% | train loss=0.06943935867144349 (2371s)
+| epoch 008 | valid accuracy=95.4% | valid loss=0.18622708299185367
+Learning rate: [0.0001]
+| epoch 009 | train accuracy=98.5% | train loss=0.06254216616319373 (2670s)
+| epoch 009 | valid accuracy=95.4% | valid loss=0.18693689047148887
+Learning rate: [0.0001]
+| epoch 010 | train accuracy=98.6% | train loss=0.056578568864564235 (2969s)
+| epoch 010 | valid accuracy=95.4% | valid loss=0.18718246453302972
+Learning rate: [1e-05]
+| epoch 011 | train accuracy=98.8% | train loss=0.051063284380371346 (3269s)
+| epoch 011 | valid accuracy=95.5% | valid loss=0.18553295900212957
+Learning rate: [1e-05]
+| epoch 012 | train accuracy=98.8% | train loss=0.04947655128510273 (3568s)
+| epoch 012 | valid accuracy=95.5% | valid loss=0.1855308365225792
+Learning rate: [1e-05]
+| epoch 013 | train accuracy=98.9% | train loss=0.048595910112997714 (3867s)
+| epoch 013 | valid accuracy=95.5% | valid loss=0.18566818510471506
+Learning rate: [1e-05]
+| epoch 014 | train accuracy=98.9% | train loss=0.04788470879468591 (4166s)
+| epoch 014 | valid accuracy=95.5% | valid loss=0.18574478386501048
+Learning rate: [1e-05]
+| epoch 015 | train accuracy=98.9% | train loss=0.047222937206096174 (4466s)
+| epoch 015 | valid accuracy=95.5% | valid loss=0.1858725021240559
+CharRNNClassifier(
+  (embed): Embedding(11798, 64, padding_idx=0)
+  (rnn): LSTM(64, 512)
+  (h2o): Linear(in_features=512, out_features=235, bias=True)
+)
+embed.weight         755072 [11798, 64]
+rnn.weight_ih_l0     131072 [2048, 64]
+rnn.weight_hh_l0     1048576 [2048, 512]
+rnn.bias_ih_l0       2048 [2048]
+rnn.bias_hh_l0       2048 [2048]
+h2o.weight           120320 [235, 512]
+h2o.bias             235 [235]
+TOTAL                2059371
+Gru
+128
+Learning rate: [0.001]
+| epoch 001 | train accuracy=68.2% | train loss=1.5277168042355396 (115s)
+| epoch 001 | valid accuracy=85.2% | valid loss=0.5998504973878251
+Learning rate: [0.001]
+| epoch 002 | train accuracy=86.9% | train loss=0.5129054987354481 (244s)
+| epoch 002 | valid accuracy=88.6% | valid loss=0.44236035829909304
+Learning rate: [0.001]
+| epoch 003 | train accuracy=89.5% | train loss=0.40406383605459906 (375s)
+| epoch 003 | valid accuracy=89.7% | valid loss=0.387019703601269
+Learning rate: [0.001]
+| epoch 004 | train accuracy=90.8% | train loss=0.35143366985625407 (505s)
+| epoch 004 | valid accuracy=90.5% | valid loss=0.3551295911910686
+Learning rate: [0.001]
+| epoch 005 | train accuracy=91.7% | train loss=0.3164061476778477 (634s)
+| epoch 005 | valid accuracy=90.9% | valid loss=0.3450348374387051
+Learning rate: [0.0001]
+| epoch 006 | train accuracy=93.2% | train loss=0.2638468898217729 (764s)
+| epoch 006 | valid accuracy=91.9% | valid loss=0.31059911655872424
+Learning rate: [0.0001]
+| epoch 007 | train accuracy=93.4% | train loss=0.25487240692180524 (894s)
+| epoch 007 | valid accuracy=92.0% | valid loss=0.30693456449914486
+Learning rate: [0.0001]
+| epoch 008 | train accuracy=93.6% | train loss=0.25003259053953153 (1024s)
+| epoch 008 | valid accuracy=92.1% | valid loss=0.30444667199317443
+Learning rate: [0.0001]
+| epoch 009 | train accuracy=93.6% | train loss=0.24599018904154604 (1154s)
+| epoch 009 | valid accuracy=92.1% | valid loss=0.30229029051800993
+Learning rate: [0.0001]
+| epoch 010 | train accuracy=93.8% | train loss=0.24237959762488273 (1284s)
+| epoch 010 | valid accuracy=92.1% | valid loss=0.3006121881058876
+Learning rate: [1e-05]
+| epoch 011 | train accuracy=93.9% | train loss=0.23658349675954657 (1414s)
+| epoch 011 | valid accuracy=92.2% | valid loss=0.2987719743708347
+Learning rate: [1e-05]
+| epoch 012 | train accuracy=94.0% | train loss=0.23548643681121634 (1544s)
+| epoch 012 | valid accuracy=92.2% | valid loss=0.2983467021394283
+Learning rate: [1e-05]
+| epoch 013 | train accuracy=94.0% | train loss=0.23494761989820512 (1674s)
+| epoch 013 | valid accuracy=92.2% | valid loss=0.2980541885355686
+Learning rate: [1e-05]
+| epoch 014 | train accuracy=94.0% | train loss=0.23451363734520497 (1804s)
+| epoch 014 | valid accuracy=92.2% | valid loss=0.2977989767358658
+Learning rate: [1e-05]
+| epoch 015 | train accuracy=94.0% | train loss=0.234111118837874 (1940s)
+| epoch 015 | valid accuracy=92.3% | valid loss=0.2975848430166853
+CharRNNClassifier(
+  (embed): Embedding(11798, 64, padding_idx=0)
+  (rnn): GRU(64, 128)
+  (h2o): Linear(in_features=128, out_features=235, bias=True)
+)
+embed.weight         755072 [11798, 64]
+rnn.weight_ih_l0     24576 [384, 64]
+rnn.weight_hh_l0     49152 [384, 128]
+rnn.bias_ih_l0       384 [384]
+rnn.bias_hh_l0       384 [384]
+h2o.weight           30080 [235, 128]
+h2o.bias             235 [235]
+TOTAL                859883
+256
+Learning rate: [0.001]
+| epoch 001 | train accuracy=74.2% | train loss=1.1717943956953414 (134s)
+| epoch 001 | valid accuracy=89.3% | valid loss=0.41920816419479695
+Learning rate: [0.001]
+| epoch 002 | train accuracy=90.9% | train loss=0.3547431179272368 (283s)
+| epoch 002 | valid accuracy=91.6% | valid loss=0.32620703443567806
+Learning rate: [0.001]
+| epoch 003 | train accuracy=92.7% | train loss=0.28142188645360317 (432s)
+| epoch 003 | valid accuracy=92.4% | valid loss=0.30109860782420383
+Learning rate: [0.001]
+| epoch 004 | train accuracy=93.7% | train loss=0.2416600691029366 (582s)
+| epoch 004 | valid accuracy=92.9% | valid loss=0.2795163007644897
+Learning rate: [0.001]
+| epoch 005 | train accuracy=94.3% | train loss=0.21464271616412603 (731s)
+| epoch 005 | valid accuracy=93.1% | valid loss=0.27384363734468503
+Learning rate: [0.0001]
+| epoch 006 | train accuracy=95.8% | train loss=0.16025825812651756 (880s)
+| epoch 006 | valid accuracy=94.0% | valid loss=0.23644467171202316
+Learning rate: [0.0001]
+| epoch 007 | train accuracy=96.1% | train loss=0.1480952886641818 (1030s)
+| epoch 007 | valid accuracy=94.0% | valid loss=0.23324127377855017
+Learning rate: [0.0001]
+| epoch 008 | train accuracy=96.3% | train loss=0.14141497055314323 (1180s)
+| epoch 008 | valid accuracy=94.0% | valid loss=0.2319803356617055
+Learning rate: [0.0001]
+| epoch 009 | train accuracy=96.5% | train loss=0.13622761526045965 (1329s)
+| epoch 009 | valid accuracy=94.0% | valid loss=0.2310074260843561
+Learning rate: [0.0001]
+| epoch 010 | train accuracy=96.6% | train loss=0.13170018109191764 (1479s)
+| epoch 010 | valid accuracy=94.1% | valid loss=0.2305017520062467
+Learning rate: [1e-05]
+| epoch 011 | train accuracy=96.7% | train loss=0.1258693487197557 (1629s)
+| epoch 011 | valid accuracy=94.2% | valid loss=0.2274670152943185
+Learning rate: [1e-05]
+| epoch 012 | train accuracy=96.8% | train loss=0.12421586536421897 (1778s)
+| epoch 012 | valid accuracy=94.3% | valid loss=0.22693252988825452
+Learning rate: [1e-05]
+| epoch 013 | train accuracy=96.8% | train loss=0.12347470763622923 (1928s)
+| epoch 013 | valid accuracy=94.3% | valid loss=0.2266834143095828
+Learning rate: [1e-05]
+| epoch 014 | train accuracy=96.8% | train loss=0.12290573749227568 (2078s)
+| epoch 014 | valid accuracy=94.2% | valid loss=0.2264979816370822
+Learning rate: [1e-05]
+| epoch 015 | train accuracy=96.8% | train loss=0.12239872338563362 (2228s)
+| epoch 015 | valid accuracy=94.2% | valid loss=0.22637395600816038
+CharRNNClassifier(
+  (embed): Embedding(11798, 64, padding_idx=0)
+  (rnn): GRU(64, 256)
+  (h2o): Linear(in_features=256, out_features=235, bias=True)
+)
+embed.weight         755072 [11798, 64]
+rnn.weight_ih_l0     49152 [768, 64]
+rnn.weight_hh_l0     196608 [768, 256]
+rnn.bias_ih_l0       768 [768]
+rnn.bias_hh_l0       768 [768]
+h2o.weight           60160 [235, 256]
+h2o.bias             235 [235]
+TOTAL                1062763
+512
+Learning rate: [0.001]
+| epoch 001 | train accuracy=79.0% | train loss=0.9224472927755498 (228s)
+| epoch 001 | valid accuracy=91.5% | valid loss=0.3322879464169766
+Learning rate: [0.001]
+| epoch 002 | train accuracy=92.8% | train loss=0.28017468440627796 (474s)
+| epoch 002 | valid accuracy=93.4% | valid loss=0.26076864349081164
+Learning rate: [0.001]
+| epoch 003 | train accuracy=94.2% | train loss=0.21979033571767045 (721s)
+| epoch 003 | valid accuracy=94.0% | valid loss=0.24475370137742225
+Learning rate: [0.001]
+| epoch 004 | train accuracy=95.2% | train loss=0.18015502588316165 (968s)
+| epoch 004 | valid accuracy=94.3% | valid loss=0.2343473659779163
+Learning rate: [0.001]
+| epoch 005 | train accuracy=95.8% | train loss=0.15034056523925762 (1214s)
+| epoch 005 | valid accuracy=94.2% | valid loss=0.23995397566607657
+Learning rate: [0.0001]
+| epoch 006 | train accuracy=97.5% | train loss=0.09154659929968655 (1460s)
+| epoch 006 | valid accuracy=95.1% | valid loss=0.20387067324176747
+Learning rate: [0.0001]
+| epoch 007 | train accuracy=97.9% | train loss=0.07717109664541451 (1707s)
+| epoch 007 | valid accuracy=95.1% | valid loss=0.20334088976681233
+Learning rate: [0.0001]
+| epoch 008 | train accuracy=98.2% | train loss=0.06868106887952247 (1953s)
+| epoch 008 | valid accuracy=95.1% | valid loss=0.2029540857885112
+Learning rate: [0.0001]
+| epoch 009 | train accuracy=98.4% | train loss=0.06194397435491865 (2200s)
+| epoch 009 | valid accuracy=95.2% | valid loss=0.2035633170820297
+Learning rate: [0.0001]
+| epoch 010 | train accuracy=98.6% | train loss=0.05616365816520448 (2446s)
+| epoch 010 | valid accuracy=95.2% | valid loss=0.20484764689460713
+Learning rate: [1e-05]
+| epoch 011 | train accuracy=98.7% | train loss=0.050545636463102867 (2693s)
+| epoch 011 | valid accuracy=95.3% | valid loss=0.2026933091961323
+Learning rate: [1e-05]
+| epoch 012 | train accuracy=98.8% | train loss=0.04877398204363566 (2939s)
+| epoch 012 | valid accuracy=95.3% | valid loss=0.20254063845758744
+Learning rate: [1e-05]
+| epoch 013 | train accuracy=98.8% | train loss=0.0479167530558498 (3185s)
+| epoch 013 | valid accuracy=95.3% | valid loss=0.20267039255544225
+Learning rate: [1e-05]
+| epoch 014 | train accuracy=98.8% | train loss=0.047215491627194385 (3432s)
+| epoch 014 | valid accuracy=95.3% | valid loss=0.20284122248976788
+Learning rate: [1e-05]
+| epoch 015 | train accuracy=98.9% | train loss=0.04660496126385802 (3678s)
+| epoch 015 | valid accuracy=95.3% | valid loss=0.2030668732495384
+CharRNNClassifier(
+  (embed): Embedding(11798, 64, padding_idx=0)
+  (rnn): GRU(64, 512)
+  (h2o): Linear(in_features=512, out_features=235, bias=True)
+)
+embed.weight         755072 [11798, 64]
+rnn.weight_ih_l0     98304 [1536, 64]
+rnn.weight_hh_l0     786432 [1536, 512]
+rnn.bias_ih_l0       1536 [1536]
+rnn.bias_hh_l0       1536 [1536]
+h2o.weight           120320 [235, 512]
+h2o.bias             235 [235]
+TOTAL                1763435
