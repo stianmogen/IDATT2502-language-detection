@@ -93,8 +93,8 @@ def mnb_predict(text, cv, le, model):
     print("Predictions:")
     for i in range(len(top_preds)):
         lang = le.inverse_transform([top_preds[i]])
-        lang = labels[labels.Label == lang].English.item()
-        print(f"{i + 1}. {lang[0]}")
+        lang = labels[labels.Label == lang[0]].English.item()
+        print(f"{i+1}. {lang}")
 
 
 def remove_special(sentence):
