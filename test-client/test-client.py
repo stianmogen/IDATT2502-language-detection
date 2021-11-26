@@ -3,8 +3,6 @@ import re
 
 import torch
 import numpy as np
-from pandas import read_csv
-
 from rnn.dictionary import load_dictionary
 from rnn.rnn_model import CharRNNClassifier
 
@@ -18,8 +16,6 @@ mnb_out_root = "../mnb/out/"
 rnn_out_root = "../rnn/out/"
 
 char_dictionary, lang_dictionary = load_dictionary("../rnn/out/")
-labels = read_csv("../input/labels.csv", sep=';')
-print(labels[labels.Label=='nob'].English.item())
 
 
 def mnb_model(type, ngram):
@@ -81,7 +77,6 @@ def rnn_predict(sentence, model):
     print("Predictions:")
     for i in range(len(top_preds)):
         lang = lang_dictionary.tokens[top_preds[i]]
-        lang = labels[labels.Label == lang].English.item()
         print(f"{i+1}. {lang}")
 
 
@@ -93,7 +88,6 @@ def mnb_predict(text, cv, le, model):
     print("Predictions:")
     for i in range(len(top_preds)):
         lang = le.inverse_transform([top_preds[i]])
-        lang = labels[labels.Label == lang].English.item()
         print(f"{i + 1}. {lang[0]}")
 
 
@@ -109,7 +103,7 @@ analyzers = {"char": [3], "word": [1]}
 
 
 print("Welcome to test client")
-print("q = quit, m = change model")
+print("q = exit, m = change model")
 
 finished = False
 while not finished:
@@ -148,11 +142,11 @@ while not finished:
         else:
             continue
         sentence = ""
-        while sentence != "m":
-            sentence = input("Enter a sentence ('q' to quit, 'm' to change model)\n")
+        while sentence != "e":
+            sentence = input("Enter a sentence ('q' to quit, 'e' to exit)\n")
             if sentence == "q":
                 finished = True
-            elif sentence == "m":
+            elif sentence == "e":
                 break
             else:
                 rnn_predict(sentence, model)
@@ -178,11 +172,11 @@ while not finished:
         else:
             continue
         sentence = ""
-        while sentence != "m":
-            sentence = input("Enter a sentence ('q' to quit, 'm' to change model)\n")
+        while sentence != "e":
+            sentence = input("Enter a sentence ('q' to quit, 'e' to exit)\n")
             if sentence == "q":
                 finished = True
-            elif sentence == "m":
+            elif sentence == "e":
                 break
             else:
                 mnb_predict(sentence, cv, le, model)
